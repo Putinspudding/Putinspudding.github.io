@@ -17,7 +17,7 @@
 <meta property="og:image" content="https://raytracing.github.io/images/fig-1.01-ppm.jpg">
 <meta property="og:image" content="https://putinspudding.github.io/img/first.png">
 <meta property="article:published_time" content="2020-07-20T12:10:03.000Z">
-<meta property="article:modified_time" content="2020-07-23T15:23:28.892Z">
+<meta property="article:modified_time" content="2020-07-24T15:29:30.333Z">
 <meta property="article:author" content="Putinspudding">
 <meta property="article:tag" content="Rust">
 <meta name="twitter:card" content="summary">
@@ -103,7 +103,7 @@
 <p><code>pub unsafe fn to_int_unchecked&lt;Int&gt;(self) -&gt; Int</code> 是 Rust 1.44.0 的新方法，本机原本装的是 Rust 1.42 ,使用 rustup 对Rust 升级无果，发现是包管理器的锅，当初用的 apt install rustc，而 Ubuntu 的 rustc 最新版只有 1.42,卸载后在官网重新下载安装了最新版的 Rust.<br>运行上面这段代码 <code>cargo run &gt; first.ppm</code>，标准输出会写入 first.ppm,标准错误会显示在屏幕上，生成的是一个256×256的图片，从第 4 行开始，到第 65539 行结束，每 256 行视为图片的一行<br><img src="/img/first.png" alt="输出效果图"></p>
 <hr>
 <p>定义一个三维向量结构体<code>Vec3</code>来表示方向、色彩，它有两个 type-alias : <code>Point3</code>,<code>Color</code>（Rust 建议 identifier 首字母大写，以及 <code>can&#39;t use a type alias as a constructor</code>）（注：接下来的代码是一大段的关于 <code>Vec3</code> 的运算符方法定义，我原本的想法是使用引用 <code>&amp;</code> 来避免运算中 ownership 的转移，但是这样会导致 <code>&amp;(&amp;(&amp;origin - &amp;(&amp;horizontal / 2 as f32)) - &amp;(&amp;vertical / 2 as f32))- &amp;Vec3(0.0, 0.0, focal_length)</code> 或是 <code>&amp;(&amp;(&amp;lower_left_corner + &amp;(u * &amp;horizontal)) + &amp;(v * &amp;vertical)) - &amp;origin</code>这样可读性与美观都十分差的代码，向其他人询问后发现，可以通过在 <code>Vec3</code> 定义时，在 <code>pub struct Vec3(pub f32, pub f32, pub f32);</code> 上一行插入 <code>#[derive(Debug, PartialEq, Clone, Copy)]</code> 在 Vec3 类调用时进行 Copy 从而不转移 ownership，这意味着我需要重构一遍接下来所有的代码）</p>
-<h3 id="此博文仍在建设中，同步到目前学习进度之前都会在此博文更新"><a href="#此博文仍在建设中，同步到目前学习进度之前都会在此博文更新" class="headerlink" title="此博文仍在建设中，同步到目前学习进度之前都会在此博文更新"></a>此博文仍在建设中，同步到目前学习进度之前都会在此博文更新</h3>
+
       
     </div>
     <footer class="article-footer">
@@ -117,6 +117,15 @@
   
     
 <nav id="article-nav">
+  
+    <a href="/2020/07/24/RayTracing2/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          RayTracing.vol2
+        
+      </div>
+    </a>
   
   
     <a href="/2020/07/20/Pwdding/" id="article-nav-older" class="article-nav-link-wrap">
@@ -170,6 +179,10 @@
     <h3 class="widget-title">最新文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2020/07/24/RayTracing2/">RayTracing.vol2</a>
+          </li>
         
           <li>
             <a href="/2020/07/20/RayTracing1/">RayTracing.vol1</a>
