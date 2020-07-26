@@ -1,221 +1,386 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-  
-  <title>RayTracing.vol2 | Pwdding&#39;s Dinning Hall</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Github Repo  RayTracing.vol1  定义 Vec3 使用了元组结构体，其中每个字段的类型都为 f32，对 Vec3 进行初始化调用定义, 实现加、减、数乘、复合算数赋值、点乘与叉乘的方法，并且定义了 Vec3 的两个 type alias Color 与 Point3. [lib.rs] 对Vec3结构体进行定义，以及对运算符进行重载12345678910111213141">
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"putinspudding.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Github Repo  RayTracing.vol1  定义 Vec3 使用了元组结构体，其中每个字段的类型都为 f32，对 Vec3 进行初始化调用定义, 实现加、减、取反、数乘、复合算数赋值(关于自定义运算符 Trait 可在 https:&#x2F;&#x2F;doc.rust-lang.org 找到)、点乘与叉乘的方法，并且定义了 Vec3 的两个 type alias Color 与 Point3. [">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RayTracing.vol2">
 <meta property="og:url" content="https://putinspudding.github.io/2020/07/24/RayTracing2/index.html">
 <meta property="og:site_name" content="Pwdding&#39;s Dinning Hall">
-<meta property="og:description" content="Github Repo  RayTracing.vol1  定义 Vec3 使用了元组结构体，其中每个字段的类型都为 f32，对 Vec3 进行初始化调用定义, 实现加、减、数乘、复合算数赋值、点乘与叉乘的方法，并且定义了 Vec3 的两个 type alias Color 与 Point3. [lib.rs] 对Vec3结构体进行定义，以及对运算符进行重载12345678910111213141">
+<meta property="og:description" content="Github Repo  RayTracing.vol1  定义 Vec3 使用了元组结构体，其中每个字段的类型都为 f32，对 Vec3 进行初始化调用定义, 实现加、减、取反、数乘、复合算数赋值(关于自定义运算符 Trait 可在 https:&#x2F;&#x2F;doc.rust-lang.org 找到)、点乘与叉乘的方法，并且定义了 Vec3 的两个 type alias Color 与 Point3. [">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-07-24T15:28:40.000Z">
-<meta property="article:modified_time" content="2020-07-24T16:35:36.451Z">
+<meta property="article:modified_time" content="2020-07-26T07:35:20.030Z">
 <meta property="article:author" content="Putinspudding">
 <meta name="twitter:card" content="summary">
-  
-    <link rel="alternate" href="/atom.xml" title="Pwdding&#39;s Dinning Hall" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  
-<link rel="stylesheet" href="/css/style.css">
 
-<meta name="generator" content="Hexo 4.2.1"></head>
+<link rel="canonical" href="https://putinspudding.github.io/2020/07/24/RayTracing2/">
 
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Pwdding&#39;s Dinning Hall</a>
-      </h1>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://putinspudding.github.io"></form>
-      </div>
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>RayTracing.vol2 | Pwdding's Dinning Hall</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
     </div>
   </div>
-</header>
-      <div class="outer">
-        <section id="main"><article id="[post]-RayTracing2" class="article article-type-[post]" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/07/24/RayTracing2/" class="article-date">
-  <time datetime="2020-07-24T15:28:40.000Z" itemprop="datePublished">2020-07-24</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      RayTracing.vol2
-    </h1>
-  
 
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pwdding's Dinning Hall</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://putinspudding.github.io/2020/07/24/RayTracing2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Putinspudding">
+      <meta itemprop="description" content="A most normal college student">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pwdding's Dinning Hall">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RayTracing.vol2
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-07-24 23:28:40" itemprop="dateCreated datePublished" datetime="2020-07-24T23:28:40+08:00">2020-07-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-26 15:35:20" itemprop="dateModified" datetime="2020-07-26T15:35:20+08:00">2020-07-26</time>
+              </span>
+
+          
+
+        </div>
       </header>
+
     
-    <div class="article-entry" itemprop="articleBody">
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
         <p><a href="https://github.com/Putinspudding/RayTraceInRust" target="_blank" rel="noopener">Github Repo</a></p>
 <hr>
 <p><a href="https://putinspudding.github.io/2020/07/20/RayTracing1/">RayTracing.vol1</a></p>
 <hr>
-<p>定义 Vec3 使用了元组结构体，其中每个字段的类型都为 f32，对 Vec3 进行初始化调用定义, 实现加、减、数乘、复合算数赋值、点乘与叉乘的方法，并且定义了 Vec3 的两个 type alias Color 与 Point3.</p>
+<p>定义 Vec3 使用了元组结构体，其中每个字段的类型都为 f32，对 Vec3 进行初始化调用定义, 实现加、减、取反、数乘、复合算数赋值(关于自定义运算符 Trait 可在 <a href="https://doc.rust-lang.org" target="_blank" rel="noopener">https://doc.rust-lang.org</a> 找到)、点乘与叉乘的方法，并且定义了 Vec3 的两个 type alias Color 与 Point3.</p>
 <figure class="highlight rust"><figcaption><span>[lib.rs] 对Vec3结构体进行定义，以及对运算符进行重载</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> std::ops::Add;</span><br><span class="line"><span class="keyword">use</span> std::ops::AddAssign;</span><br><span class="line"><span class="keyword">use</span> std::ops::Div;</span><br><span class="line"><span class="keyword">use</span> std::ops::DivAssign;</span><br><span class="line"><span class="keyword">use</span> std::ops::Mul;</span><br><span class="line"><span class="keyword">use</span> std::ops::MulAssign;</span><br><span class="line"><span class="keyword">use</span> std::ops::Neg;</span><br><span class="line"><span class="keyword">use</span> std::ops::Sub;</span><br><span class="line"><span class="meta">#[derive(Debug, PartialEq, Clone, Copy)]</span></span><br><span class="line"><span class="keyword">pub</span> <span class="class"><span class="keyword">struct</span> <span class="title">Vec3</span></span>(<span class="keyword">pub</span> <span class="built_in">f32</span>, <span class="keyword">pub</span> <span class="built_in">f32</span>, <span class="keyword">pub</span> <span class="built_in">f32</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span> <span class="built_in">Default</span> <span class="keyword">for</span> Vec3 &#123;</span><br><span class="line">    <span class="function"><span class="keyword">fn</span> <span class="title">default</span></span>() -&gt; <span class="keyword">Self</span> &#123;</span><br><span class="line">        Vec3(<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span> Vec3 &#123;</span><br><span class="line">    <span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">new</span></span>(e0: <span class="built_in">f32</span>, e1: <span class="built_in">f32</span>, e2: <span class="built_in">f32</span>) -&gt; Vec3 &#123;</span><br><span class="line">        Vec3(e0, e1, e2)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">x</span></span>(&amp;<span class="keyword">self</span>) -&gt; <span class="built_in">f32</span> &#123;</span><br><span class="line">        <span class="keyword">self</span>.<span class="number">0</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">y</span></span>(&amp;<span class="keyword">self</span>) -&gt; <span class="built_in">f32</span> &#123;</span><br><span class="line">        <span class="keyword">self</span>.<span class="number">1</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">z</span></span>(&amp;<span class="keyword">self</span>) -&gt; <span class="built_in">f32</span> &#123;</span><br><span class="line">        <span class="keyword">self</span>.<span class="number">2</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">length_squared</span></span>(&amp;<span class="keyword">self</span>) -&gt; <span class="built_in">f32</span> &#123;</span><br><span class="line">        <span class="keyword">self</span>.<span class="number">0</span> * <span class="keyword">self</span>.<span class="number">0</span> + <span class="keyword">self</span>.<span class="number">1</span> * <span class="keyword">self</span>.<span class="number">1</span> + <span class="keyword">self</span>.<span class="number">2</span> * <span class="keyword">self</span>.<span class="number">2</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">length</span></span>(&amp;<span class="keyword">self</span>) -&gt; <span class="built_in">f32</span> &#123;</span><br><span class="line">        <span class="keyword">self</span>.length_squared().sqrt()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span> Neg <span class="keyword">for</span> Vec3 &#123;</span><br><span class="line">    <span class="class"><span class="keyword">type</span> <span class="title">Output</span></span> = <span class="keyword">Self</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fn</span> <span class="title">neg</span></span>(<span class="keyword">self</span>) -&gt; <span class="keyword">Self</span> &#123;</span><br><span class="line">        Vec3(-<span class="keyword">self</span>.<span class="number">0</span>, -<span class="keyword">self</span>.<span class="number">1</span>, -<span class="keyword">self</span>.<span class="number">2</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span> Add <span class="keyword">for</span> Vec3 &#123;</span><br><span class="line">    <span class="class"><span class="keyword">type</span> <span class="title">Output</span></span> = Vec3;</span><br><span class="line">    <span class="function"><span class="keyword">fn</span> <span class="title">add</span></span>(<span class="keyword">self</span>, other: <span class="keyword">Self</span>) -&gt; <span class="keyword">Self</span> &#123;</span><br><span class="line">        Vec3(<span class="keyword">self</span>.<span class="number">0</span> + other.<span class="number">0</span>, <span class="keyword">self</span>.<span class="number">1</span> + other.<span class="number">1</span>, <span class="keyword">self</span>.<span class="number">2</span> + other.<span class="number">2</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span> Sub <span class="keyword">for</span> Vec3 &#123;</span><br><span class="line">    <span class="class"><span class="keyword">type</span> <span class="title">Output</span></span> = Vec3;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fn</span> <span class="title">sub</span></span>(<span class="keyword">self</span>, other: <span class="keyword">Self</span>) -&gt; <span class="keyword">Self</span> &#123;</span><br><span class="line">        Vec3(<span class="keyword">self</span>.<span class="number">0</span> - other.<span class="number">0</span>, <span class="keyword">self</span>.<span class="number">1</span> - other.<span class="number">1</span>, <span class="keyword">self</span>.<span class="number">2</span> - other.<span class="number">2</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span> Mul <span class="keyword">for</span> Vec3 &#123;</span><br><span class="line">    <span class="class"><span class="keyword">type</span> <span class="title">Output</span></span> = Vec3;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fn</span> <span class="title">mul</span></span>(<span class="keyword">self</span>, other: Vec3) -&gt; <span class="keyword">Self</span> &#123;</span><br><span class="line">        Vec3(<span class="keyword">self</span>.<span class="number">0</span> * other.<span class="number">0</span>, <span class="keyword">self</span>.<span class="number">1</span> * other.<span class="number">1</span>, <span class="keyword">self</span>.<span class="number">2</span> * other.<span class="number">2</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span> Mul&lt;<span class="built_in">f32</span>&gt; <span class="keyword">for</span> Vec3 &#123;</span><br><span class="line">    <span class="class"><span class="keyword">type</span> <span class="title">Output</span></span> = <span class="keyword">Self</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fn</span> <span class="title">mul</span></span>(<span class="keyword">self</span>, other: <span class="built_in">f32</span>) -&gt; <span class="keyword">Self</span> &#123;</span><br><span class="line">        Vec3(<span class="keyword">self</span>.<span class="number">0</span> * other, <span class="keyword">self</span>.<span class="number">1</span> * other, <span class="keyword">self</span>.<span class="number">2</span> * other)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span> Mul&lt;Vec3&gt; <span class="keyword">for</span> <span class="built_in">f32</span> &#123;</span><br><span class="line">    <span class="class"><span class="keyword">type</span> <span class="title">Output</span></span> = Vec3;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fn</span> <span class="title">mul</span></span>(<span class="keyword">self</span>, other: Vec3) -&gt; Vec3 &#123;</span><br><span class="line">        other * <span class="keyword">self</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span> Div&lt;<span class="built_in">f32</span>&gt; <span class="keyword">for</span> Vec3 &#123;</span><br><span class="line">    <span class="class"><span class="keyword">type</span> <span class="title">Output</span></span> = <span class="keyword">Self</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fn</span> <span class="title">div</span></span>(<span class="keyword">self</span>, other: <span class="built_in">f32</span>) -&gt; <span class="keyword">Self</span> &#123;</span><br><span class="line">        <span class="keyword">self</span> * (<span class="number">1.0</span> / other)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span> AddAssign&lt;Vec3&gt; <span class="keyword">for</span> Vec3 &#123;</span><br><span class="line">    <span class="function"><span class="keyword">fn</span> <span class="title">add_assign</span></span>(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>, other: Vec3) &#123;</span><br><span class="line">        *<span class="keyword">self</span> = <span class="keyword">Self</span>(<span class="keyword">self</span>.<span class="number">0</span> + other.<span class="number">0</span>, <span class="keyword">self</span>.<span class="number">1</span> + other.<span class="number">1</span>, <span class="keyword">self</span>.<span class="number">2</span> + other.<span class="number">2</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span> MulAssign&lt;<span class="built_in">f32</span>&gt; <span class="keyword">for</span> Vec3 &#123;</span><br><span class="line">    <span class="function"><span class="keyword">fn</span> <span class="title">mul_assign</span></span>(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>, other: <span class="built_in">f32</span>) &#123;</span><br><span class="line">        *<span class="keyword">self</span> = <span class="keyword">Self</span>(<span class="keyword">self</span>.<span class="number">0</span> * other, <span class="keyword">self</span>.<span class="number">1</span> * other, <span class="keyword">self</span>.<span class="number">2</span> * other);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span> DivAssign&lt;<span class="built_in">f32</span>&gt; <span class="keyword">for</span> Vec3 &#123;</span><br><span class="line">    <span class="function"><span class="keyword">fn</span> <span class="title">div_assign</span></span>(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>, other: <span class="built_in">f32</span>) &#123;</span><br><span class="line">        *<span class="keyword">self</span> *= <span class="number">1.0</span> / other;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">dot</span></span>(u: Vec3, v: Vec3) -&gt; <span class="built_in">f32</span> &#123;</span><br><span class="line">    u.<span class="number">0</span> * v.<span class="number">0</span> + u.<span class="number">1</span> * v.<span class="number">1</span> + u.<span class="number">2</span> * v.<span class="number">2</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">cross</span></span>(u: Vec3, v: Vec3) -&gt; Vec3 &#123;</span><br><span class="line">    Vec3(</span><br><span class="line">        u.<span class="number">1</span> * v.<span class="number">2</span> - u.<span class="number">2</span> * v.<span class="number">1</span>,</span><br><span class="line">        u.<span class="number">2</span> * v.<span class="number">0</span> - u.<span class="number">0</span> * v.<span class="number">2</span>,</span><br><span class="line">        u.<span class="number">0</span> * v.<span class="number">1</span> - u.<span class="number">1</span> * v.<span class="number">0</span>,</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">unit_vector</span></span>(u: Vec3) -&gt; Vec3 &#123;</span><br><span class="line">    u / u.length()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">pub</span> <span class="class"><span class="keyword">type</span> <span class="title">Point3</span></span> = Vec3;</span><br><span class="line"><span class="keyword">pub</span> <span class="class"><span class="keyword">type</span> <span class="title">Color</span></span> = Vec3;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-      
     </div>
-    <footer class="article-footer">
-      <a data-url="https://putinspudding.github.io/2020/07/24/RayTracing2/" data-id="ckd0dw3780000mcs42fdf1y5i" class="article-share-link">Share</a>
-      
-      
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/07/20/RayTracing1/" rel="prev" title="RayTracing.vol1">
+      <i class="fa fa-chevron-left"></i> RayTracing.vol1
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Putinspudding</p>
+  <div class="site-description" itemprop="description">A most normal college student</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Putinspudding</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
     </footer>
   </div>
-  
-    
-<nav id="article-nav">
-  
-  
-    <a href="/2020/07/20/RayTracing1/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">RayTracing.vol1</div>
-    </a>
-  
-</nav>
 
   
-</article>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
-</section>
-        
-          <aside id="sidebar">
-  
-    
+<script src="/js/utils.js"></script>
 
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">标签</h3>
-    <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Rust/" rel="tag">Rust</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D/" rel="tag">自我介绍</a></li></ul>
-    </div>
-  </div>
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
 
 
   
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">标签云</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/Rust/" style="font-size: 10px;">Rust</a> <a href="/tags/%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D/" style="font-size: 10px;">自我介绍</a>
-    </div>
-  </div>
 
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">归档</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a></li></ul>
-    </div>
-  </div>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">最新文章</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2020/07/24/RayTracing2/">RayTracing.vol2</a>
-          </li>
-        
-          <li>
-            <a href="/2020/07/20/RayTracing1/">RayTracing.vol1</a>
-          </li>
-        
-          <li>
-            <a href="/2020/07/20/Pwdding/">Pwdding?</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
 
   
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2020 Putinspudding<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-
-
-  
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-
-  
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
-
-
-
-
-<script src="/js/script.js"></script>
-
-
-
-
-  </div>
 </body>
 </html>
