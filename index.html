@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 4.2.1">
@@ -72,12 +72,12 @@
   .use-motion .logo-line-before i { left: initial; }
   .use-motion .logo-line-after i { right: initial; }
   </style>
-</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</noscript>
 
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+  <div class="container use-motion">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -115,6 +115,11 @@
     <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
 
   </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
         <li class="menu-item menu-item-archives">
 
     <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
@@ -143,6 +148,73 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://putinspudding.github.io/2020/07/29/RayTracing3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Putinspudding">
+      <meta itemprop="description" content="A most normal college student">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pwdding's Dinning Hall">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/29/RayTracing3/" class="post-title-link" itemprop="url">RayTracing.vol3</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-07-29 14:00:29 / 修改时间：19:18:24" itemprop="dateCreated datePublished" datetime="2020-07-29T14:00:29+08:00">2020-07-29</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a href="https://github.com/Putinspudding/RayTraceInRust" target="_blank" rel="noopener">Github Repo</a></p>
+<hr>
+<p><a href="https://putinspudding.github.io/2020/07/20/RayTracing1/">RayTracing.vol1</a><br><a href="https://putinspudding.github.io/2020/07/24/RayTracing2/">RayTracing.vol2</a></p>
+<hr>
+<p>定义一个 Ray 结构体表示射线，分为两个字段，orig 表示射线的起点，dir 表示射线的方向，定义一个方法at(t)，输出 orig + dir*t，使其能够表示由原点与方向确定的唯一直线上的所有点。</p>
+<figure class="highlight rust"><figcaption><span>[rayh.rs] 定义 Ray 结构体</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> ray::Color;</span><br><span class="line"><span class="keyword">use</span> ray::Point3;</span><br><span class="line"><span class="keyword">use</span> ray::Vec3;</span><br><span class="line"></span><br><span class="line"><span class="keyword">pub</span> <span class="class"><span class="keyword">struct</span> <span class="title">Ray</span></span> &#123;</span><br><span class="line">    <span class="keyword">pub</span> orig: Point3,</span><br><span class="line">    <span class="keyword">pub</span> dir: Vec3,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span> <span class="built_in">Default</span> <span class="keyword">for</span> Ray &#123;</span><br><span class="line">    <span class="function"><span class="keyword">fn</span> <span class="title">default</span></span>() -&gt; <span class="keyword">Self</span> &#123;</span><br><span class="line">        Ray &#123;</span><br><span class="line">            orig: <span class="built_in">Default</span>::default(),</span><br><span class="line">            dir: <span class="built_in">Default</span>::default(),</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span> Ray &#123;</span><br><span class="line">    <span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">new</span></span>(origin: &amp;Point3, direction: &amp;Vec3) -&gt; <span class="keyword">Self</span> &#123;</span><br><span class="line">        Ray &#123;</span><br><span class="line">            orig: origin.clone(),</span><br><span class="line">            dir: direction.clone(),</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">origin</span></span>(&amp;<span class="keyword">self</span>) -&gt; Point3 &#123;</span><br><span class="line">        <span class="keyword">self</span>.orig</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">direction</span></span>(&amp;<span class="keyword">self</span>) -&gt; Vec3 &#123;</span><br><span class="line">        <span class="keyword">self</span>.dir</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">at</span></span>(&amp;<span class="keyword">self</span>, t: <span class="built_in">f32</span>) -&gt; Point3 &#123;</span><br><span class="line">        <span class="keyword">self</span>.orig + t * <span class="keyword">self</span>.dir</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>ray tracer 分为三个步骤，计算从眼睛到像素的射线，确定与射线有交点的物品，计算交点处的颜色。<br>首先把图像投影在三维空间的一个平面上，这个平面的长宽比和渲染图片相同，投影平面与投影点之间的举例记为一个单位，称为焦长，即下图的 F 所表示。在(0,0,0)处设置观察点，从图像左下角开始，遍历屏幕，并使用沿屏幕两侧的两个偏移矢量在屏幕上移动射线端点。<br><img src="/img/second.png" alt=""><br>更改后的 main 代码如下：</p>
+<figure class="highlight rust"><figcaption><span>[main.rs]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">mod</span> color;</span><br><span class="line"><span class="keyword">mod</span> rayh;</span><br><span class="line"><span class="keyword">use</span> color::*;</span><br><span class="line"><span class="keyword">use</span> ray::*;</span><br><span class="line"><span class="keyword">use</span> rayh::*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> IMAGE_WIDTH: <span class="built_in">u16</span> = <span class="number">400</span>;</span><br><span class="line"><span class="keyword">const</span> ASPECT_RATIO: <span class="built_in">f32</span> = <span class="number">16.0</span> / <span class="number">9.0</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">ray_color</span></span>(r: &amp;Ray) -&gt; Color &#123;</span><br><span class="line">    <span class="keyword">let</span> unit_direction = unit_vector(r.direction());</span><br><span class="line">    <span class="keyword">let</span> t = <span class="number">0.5</span> * (unit_direction.y() + <span class="number">1.0</span>);</span><br><span class="line">    (<span class="number">1.0</span> - t) * Vec3(<span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span>) + t * Vec3(<span class="number">0.5</span>, <span class="number">0.7</span>, <span class="number">1.0</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> IMAGE_HEIGHT = <span class="keyword">unsafe</span> &#123; </span><br><span class="line">        (IMAGE_WIDTH <span class="keyword">as</span> <span class="built_in">f32</span> / ASPECT_RATIO).to_int_unchecked::&lt;<span class="built_in">u16</span>&gt;() </span><br><span class="line">        &#125;; <span class="comment">//unsafe 函数无法使用 const 定义</span></span><br><span class="line">    <span class="built_in">println!</span> &#123;<span class="string">"P3\n&#123;&#125; &#123;&#125;\n255"</span>,IMAGE_WIDTH,IMAGE_HEIGHT&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> viewport_height = <span class="number">2.0</span>;</span><br><span class="line">    <span class="keyword">let</span> viewport_width: <span class="built_in">f32</span> = ASPECT_RATIO * viewport_height;</span><br><span class="line">    <span class="keyword">let</span> focal_length = <span class="number">1.0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> origin: Point3 = Vec3(<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>);</span><br><span class="line">    <span class="keyword">let</span> horizontal = Vec3(viewport_width, <span class="number">0.0</span>, <span class="number">0.0</span>);</span><br><span class="line">    <span class="keyword">let</span> vertical = Vec3(<span class="number">0.0</span>, viewport_height, <span class="number">0.0</span>);</span><br><span class="line">    <span class="keyword">let</span> lower_left_corner =</span><br><span class="line">        origin - horizontal / <span class="number">2</span> <span class="keyword">as</span> <span class="built_in">f32</span> - vertical / <span class="number">2</span> <span class="keyword">as</span> <span class="built_in">f32</span> - Vec3(<span class="number">0.0</span>, <span class="number">0.0</span>, focal_length);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> (<span class="number">0</span>..IMAGE_HEIGHT).rev() &#123;</span><br><span class="line">        eprintln!(<span class="string">"\rScanlines remaining:&#123;&#125;"</span>, j);</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">0</span>..IMAGE_WIDTH &#123;</span><br><span class="line">            <span class="keyword">let</span> u = i <span class="keyword">as</span> <span class="built_in">f32</span> / (IMAGE_WIDTH - <span class="number">1</span>) <span class="keyword">as</span> <span class="built_in">f32</span>;</span><br><span class="line">            <span class="keyword">let</span> v = j <span class="keyword">as</span> <span class="built_in">f32</span> / (IMAGE_HEIGHT - <span class="number">1</span>) <span class="keyword">as</span> <span class="built_in">f32</span>;</span><br><span class="line">            <span class="keyword">let</span> r = Ray &#123;</span><br><span class="line">                orig: origin,</span><br><span class="line">                dir: lower_left_corner + u * horizontal + v * vertical - origin,</span><br><span class="line">            &#125;;</span><br><span class="line">            <span class="keyword">let</span> pixel_color = ray_color(&amp;r);</span><br><span class="line">            <span class="built_in">print!</span>(<span class="string">"&#123;&#125;"</span>, write_color(pixel_color));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    eprintln!(<span class="string">"\nDone"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>所得图片如下<br><img src="/img/third.png" alt=""><br>ray_color(r) 方法根据 r 的射线方向的 y 坐标确定白色与蓝色的混合程度，y 的值越大，越趋近于蓝色。如果将 main.rs 第十三行改成<code>(1.0 - t) * Vec3(0.2, 0.9, 0.2) + t * Vec3(0.2, 0.0, 1.0)</code>结果如下<br><img src="/img/fourth.png" alt=""></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -421,18 +493,36 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">4</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
         <span class="site-state-item-count">2</span>
-        <span class="site-state-item-name">标签</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
 
 
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://piggy.moe/" title="https:&#x2F;&#x2F;piggy.moe" rel="noopener" target="_blank">Piggy</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://billchen.bid/friends/" title="https:&#x2F;&#x2F;billchen.bid&#x2F;friends&#x2F;" rel="noopener" target="_blank">Billchenchina</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://logistics.camber.moe/about/" title="https:&#x2F;&#x2F;logistics.camber.moe&#x2F;about&#x2F;" rel="noopener" target="_blank">Camber</a>
+        </li>
+    </ul>
+  </div>
 
       </div>
 
@@ -488,7 +578,7 @@
 <script src="/js/schemes/muse.js"></script>
 
 
-<script src="/js/next-boot.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<script src="/js/next-boot.js"></script>
 
 
 
@@ -508,6 +598,8 @@
 
 
 
+
+  
 
   
 
