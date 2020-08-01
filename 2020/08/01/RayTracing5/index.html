@@ -20,23 +20,23 @@
     var CONFIG = {"hostname":"putinspudding.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="Github Repo  RayTracing.vol1RayTracing.vol2RayTracing.vol3  接下来是在原有图像上增加球体。一个球心为原点且半径为 R 的球，球上点的坐标$(x,y,z)$满足$x^2+y^2+z^2 &#x3D; R^2$，球内点坐标满足$x^2+y^2+z^2 &lt; R^2$，球外点坐标满足$x^2+y^2+z^2 &gt; R^2$，如果球心C为$(C_x">
+  <meta name="description" content="Github Repo  RayTracing.vol1RayTracing.vol2RayTracing.vol3RayTracing.vol4  接下来是球面着色，第一步，确定球面法线，法线是球面上点垂直于球面的向量。对于球 C 与 球面上点 P，P 点向外法线方向与$\boldsymbol {CP} $方向一致，如下图所示因为目前没有光线，所以用颜色映射来可视化法线，将各分量映射至(0,1)">
 <meta property="og:type" content="article">
-<meta property="og:title" content="RayTracing.vol4">
-<meta property="og:url" content="https://putinspudding.github.io/2020/07/30/RayTracing4/index.html">
+<meta property="og:title" content="RayTracing.vol5">
+<meta property="og:url" content="https://putinspudding.github.io/2020/08/01/RayTracing5/index.html">
 <meta property="og:site_name" content="Pwdding&#39;s Dinning Hall">
-<meta property="og:description" content="Github Repo  RayTracing.vol1RayTracing.vol2RayTracing.vol3  接下来是在原有图像上增加球体。一个球心为原点且半径为 R 的球，球上点的坐标$(x,y,z)$满足$x^2+y^2+z^2 &#x3D; R^2$，球内点坐标满足$x^2+y^2+z^2 &lt; R^2$，球外点坐标满足$x^2+y^2+z^2 &gt; R^2$，如果球心C为$(C_x">
+<meta property="og:description" content="Github Repo  RayTracing.vol1RayTracing.vol2RayTracing.vol3RayTracing.vol4  接下来是球面着色，第一步，确定球面法线，法线是球面上点垂直于球面的向量。对于球 C 与 球面上点 P，P 点向外法线方向与$\boldsymbol {CP} $方向一致，如下图所示因为目前没有光线，所以用颜色映射来可视化法线，将各分量映射至(0,1)">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://putinspudding.github.io/img/fifth.png">
-<meta property="og:image" content="https://putinspudding.github.io/img/sixth.png">
-<meta property="article:published_time" content="2020-07-30T12:57:16.000Z">
-<meta property="article:modified_time" content="2020-08-01T04:22:41.021Z">
+<meta property="og:image" content="https://raytracing.github.io/images/fig-1.05-sphere-normal.jpg">
+<meta property="og:image" content="https://putinspudding.github.io/img/seventh.png">
+<meta property="article:published_time" content="2020-08-01T02:03:42.000Z">
+<meta property="article:modified_time" content="2020-08-01T08:37:17.443Z">
 <meta property="article:author" content="Putinspudding">
 <meta property="article:tag" content="Rust">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://putinspudding.github.io/img/fifth.png">
+<meta name="twitter:image" content="https://raytracing.github.io/images/fig-1.05-sphere-normal.jpg">
 
-<link rel="canonical" href="https://putinspudding.github.io/2020/07/30/RayTracing4/">
+<link rel="canonical" href="https://putinspudding.github.io/2020/08/01/RayTracing5/">
 
 
 <script id="page-configurations">
@@ -49,7 +49,7 @@
   };
 </script>
 
-  <title>RayTracing.vol4 | Pwdding's Dinning Hall</title>
+  <title>RayTracing.vol5 | Pwdding's Dinning Hall</title>
   
 
 
@@ -159,7 +159,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://putinspudding.github.io/2020/07/30/RayTracing4/">
+    <link itemprop="mainEntityOfPage" href="https://putinspudding.github.io/2020/08/01/RayTracing5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -172,7 +172,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          RayTracing.vol4
+          RayTracing.vol5
         </h1>
 
         <div class="post-meta">
@@ -181,16 +181,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2020-07-30 20:57:16" itemprop="dateCreated datePublished" datetime="2020-07-30T20:57:16+08:00">2020-07-30</time>
+              <time title="创建时间：2020-08-01 10:03:42 / 修改时间：16:37:17" itemprop="dateCreated datePublished" datetime="2020-08-01T10:03:42+08:00">2020-08-01</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-08-01 12:22:41" itemprop="dateModified" datetime="2020-08-01T12:22:41+08:00">2020-08-01</time>
-              </span>
 
           
 
@@ -205,12 +199,20 @@
       
         <p><a href="https://github.com/Putinspudding/RayTraceInRust" target="_blank" rel="noopener">Github Repo</a></p>
 <hr>
-<p><a href="https://putinspudding.github.io/2020/07/20/RayTracing1/">RayTracing.vol1</a><br><a href="https://putinspudding.github.io/2020/07/24/RayTracing2/">RayTracing.vol2</a><br><a href="https://putinspudding.github.io/2020/07/29/RayTracing3/">RayTracing.vol3</a></p>
+<p><a href="https://putinspudding.github.io/2020/07/20/RayTracing1/">RayTracing.vol1</a><br><a href="https://putinspudding.github.io/2020/07/24/RayTracing2/">RayTracing.vol2</a><br><a href="https://putinspudding.github.io/2020/07/29/RayTracing3/">RayTracing.vol3</a><br><a href="https://putinspudding.github.io/2020/07/30/RayTracing4/">RayTracing.vol4</a></p>
 <hr>
-<p>接下来是在原有图像上增加球体。一个球心为原点且半径为 R 的球，球上点的坐标$(x,y,z)$满足$x^2+y^2+z^2 = R^2$，球内点坐标满足$x^2+y^2+z^2 &lt; R^2$，球外点坐标满足$x^2+y^2+z^2 &gt; R^2$，如果球心C为$(C_x,C_y,C_z)$的话，则球体用$(x-C_x)^2+(y-C_y)^2+(z-C_z)^2 = R^2$表示，设某点 P 坐标$(x,y,z)$，则$\boldsymbol{P-C} = (x-C_x,y-C_y,z-C_z)$,不难看出$$(\boldsymbol{P-C}) \cdot (\boldsymbol{P-C})=(x-C_x)^2+(y-C_y)^2+(z-C_z)^2$$<br>所以用向量表示球体等式为<br>$$(\boldsymbol{P-C}) \cdot (\boldsymbol{P-C})=R^2$$<br>任何满足等式的点 P 都在球面上，更进一步，对于射线 $\boldsymbol P(t) =\boldsymbol A + t\boldsymbol b$（即 vol3 提到的 orig + dir*t），如果 P(t) 与球有交点，则<br>$$(\boldsymbol P(t)-\boldsymbol C)(\boldsymbol P(t)-\boldsymbol C) = R^2$$<br>即<br>$$(\boldsymbol A + t\boldsymbol b)(\boldsymbol A + t\boldsymbol b) = R^2$$<br>将等式以 $t$ 为因变量展开<br>$$<br>t^2\boldsymbol b \cdot \boldsymbol b<br>+2t \boldsymbol b \cdot (\boldsymbol A - \boldsymbol C)<br>+(\boldsymbol A - \boldsymbol C)(\boldsymbol A - \boldsymbol C)<br>-R^2<br>=0<br>$$<br>这是关于 $t$ 的一元二次方程，根据$\boldsymbol A,\boldsymbol b,\boldsymbol C,R$的值会有零个实根（无交点）、一个实根（一个交点）、两个实根（两个交点）三种情况<br><img src="/img/fifth.png" alt=""><br>我画的示意图稍微与原版有出入，原版看上去像是在 $\boldsymbol b$ 不动的情况下移动 $\boldsymbol A$，但是我认为保持起点 $\boldsymbol A$ 不动更加有利于接下来的理解。<br>根据上文所述，对 main.rs 进行更改,增加一个 hit_sphere() 方法，在 ray_color() 中修改返回值。</p>
-<figure class="highlight rust"><figcaption><span>[main.rs]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">hit_sphere</span></span>(center: Point3, radius: <span class="built_in">f32</span>, r: &amp;Ray) -&gt; <span class="built_in">bool</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> oc: Vec3 = r.origin() - center;</span><br><span class="line">    <span class="keyword">let</span> a = dot(r.direction(), r.direction());</span><br><span class="line">    <span class="keyword">let</span> b = <span class="number">2.0</span> * dot(oc, r.direction());</span><br><span class="line">    <span class="keyword">let</span> c = dot(oc, oc) - radius * radius;</span><br><span class="line">    <span class="keyword">let</span> discriminant = b*b - <span class="number">4.0</span> * a * c; <span class="comment">//二次方程解的情况讨论</span></span><br><span class="line">    <span class="keyword">return</span> discriminant &gt; <span class="number">0.0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">ray_color</span></span>(r: &amp;Ray) -&gt; Color &#123;</span><br><span class="line">    <span class="keyword">if</span> hit_sphere(Vec3(<span class="number">0.0</span>,<span class="number">0.0</span>,-<span class="number">1.0</span>), <span class="number">0.5</span>, r)&#123;</span><br><span class="line">        <span class="keyword">return</span> Vec3(<span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">let</span> unit_direction = unit_vector(r.direction());</span><br><span class="line">    <span class="keyword">let</span> t = <span class="number">0.5</span> * (unit_direction.y() + <span class="number">1.0</span>);</span><br><span class="line">    (<span class="number">1.0</span> - t) * Vec3(<span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span>) + t * Vec3(<span class="number">0.5</span>, <span class="number">0.7</span>, <span class="number">1.0</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="/img/sixth.png" alt=""><br>图像上的圆被红色(255,0,0)覆盖，像是反射或者光影都没有，而且还有一些问题，当圆心为(0,0,1)时，程序输出的结果与上图一致，但是现实中并非如此，在观察点观察方向相反方向的物体是不会呈现在画面上的。</p>
-
+<p>接下来是球面着色，第一步，确定球面法线，法线是球面上点垂直于球面的向量。对于球 C 与 球面上点 P，P 点向外法线方向与$\boldsymbol {CP} $方向一致，如下图所示<br><img src="https://raytracing.github.io/images/fig-1.05-sphere-normal.jpg" alt=""><br>因为目前没有光线，所以用颜色映射来可视化法线，将各分量映射至(0,1)的区间（即求其单位向量 $\vec{n}$），然后将 x/y/z 映射至 r/g/b,对于法线来说，我们要求的是交点，而不是相交与否。假定与原点最近的交点（即最小的 t），在 main.rs 做出如下更改使得程序可以计算并可视化 $\vec{n}$.</p>
+<figure class="highlight rust"><figcaption><span>[main.rs]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">hit_sphere</span></span>(center: Point3, radius: <span class="built_in">f32</span>, r: &amp;Ray) -&gt; <span class="built_in">f32</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> oc: Vec3 = r.origin() - center;</span><br><span class="line">    <span class="keyword">let</span> a = dot(r.direction(),r.direction());</span><br><span class="line">    <span class="keyword">let</span> b = <span class="number">2.0</span> * dot(oc, r.direction());</span><br><span class="line">    <span class="keyword">let</span> c = dot(oc, oc) - radius * radius;</span><br><span class="line">    <span class="keyword">let</span> discriminant = b*b - <span class="number">4.0</span> * a * c;</span><br><span class="line">    <span class="keyword">if</span> discriminant &lt; <span class="number">0.0</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1.0</span>;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (-b - discriminant.sqrt() ) / (<span class="number">2.0</span> * a);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">ray_color</span></span>(r: &amp;Ray) -&gt; Color &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut</span> t = hit_sphere(Vec3(<span class="number">0.0</span>, <span class="number">0.0</span>, -<span class="number">1.0</span>), <span class="number">0.5</span>, r);</span><br><span class="line">    <span class="keyword">if</span> t &gt; <span class="number">0.0</span>&#123;</span><br><span class="line">        <span class="keyword">let</span> N: Vec3 = unit_vector(r.at(t) - Vec3(<span class="number">0.0</span>, <span class="number">0.0</span>, -<span class="number">1.0</span>));</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0.5</span> * Vec3(N.x() + <span class="number">1.0</span>, N.y() + <span class="number">1.0</span>, N.z() + <span class="number">1.0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">let</span> unit_direction = unit_vector(r.direction());</span><br><span class="line">    t = <span class="number">0.5</span> * (unit_direction.y() + <span class="number">1.0</span>);</span><br><span class="line">    (<span class="number">1.0</span> - t) * Vec3(<span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span>) + t * Vec3(<span class="number">0.5</span>, <span class="number">0.7</span>, <span class="number">1.0</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行得出下图：<br><img src="/img/seventh.png" alt=""></p>
+<hr>
+<p>对现有代码进行数学层面的简化，重新审视射线与球面相交的代码</p>
+<figure class="highlight rust"><figcaption><span>[main.rs] 先前代码</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">hit_sphere</span></span>(center: Point3, radius: <span class="built_in">f32</span>, r: &amp;Ray) -&gt; <span class="built_in">f32</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> oc: Vec3 = r.origin() - center;</span><br><span class="line">    <span class="keyword">let</span> a = dot(r.direction(),r.direction());</span><br><span class="line">    <span class="keyword">let</span> b = <span class="number">2.0</span> * dot(oc, r.direction());</span><br><span class="line">    <span class="keyword">let</span> c = dot(oc, oc) - radius * radius;</span><br><span class="line">    <span class="keyword">let</span> discriminant = b*b - <span class="number">4.0</span> * a * c;</span><br><span class="line">    <span class="keyword">if</span> discriminant &lt; <span class="number">0.0</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1.0</span>;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (-b - discriminant.sqrt() ) / (<span class="number">2.0</span> * a);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先，一个向量点乘自身等于这个向量的长度。其次，对于一元二次方程的求根公式，不难发现 b 的定义里有一个乘 2，假设 $ b=2h $，则求根公式可以做以下变形：<br>$$<br>\frac {-b \pm \sqrt {b^2-4ac}}{2a}<br>$$</p>
+<p>$$<br>=\frac {-2h \pm \sqrt {(2h)^2-4ac}}{2a}<br>$$</p>
+<p>$$<br>=\frac {-2h \pm 2 \sqrt {h^2-ac}}{2a}<br>$$</p>
+<p>$$<br>=\frac {-h \pm  \sqrt {h^2-ac}}{a}<br>$$</p>
+<p>因此我们可以简化射线与球相交的代码</p>
+<figure class="highlight rust"><figcaption><span>[main.rs] 简化之后代码</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">hit_sphere</span></span>(center: Point3, radius: <span class="built_in">f32</span>, r: &amp;Ray) -&gt; <span class="built_in">f32</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> oc: Vec3 = r.origin() - center;</span><br><span class="line">    <span class="keyword">let</span> a = r.direction().length_squared();</span><br><span class="line">    <span class="keyword">let</span> half_b = dot(oc, r.direction());</span><br><span class="line">    <span class="keyword">let</span> c = oc.length_squared() - radius * radius;</span><br><span class="line">    <span class="keyword">let</span> discriminant = half_b * half_b - a * c;</span><br><span class="line">    <span class="keyword">if</span> discriminant &lt; <span class="number">0.0</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1.0</span>;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (-half_b - discriminant.sqrt() ) / a;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
     </div>
 
     
@@ -228,13 +230,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/07/29/RayTracing3/" rel="prev" title="RayTracing.vol3">
-      <i class="fa fa-chevron-left"></i> RayTracing.vol3
+    <a href="/2020/07/30/RayTracing4/" rel="prev" title="RayTracing.vol4">
+      <i class="fa fa-chevron-left"></i> RayTracing.vol4
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/08/01/RayTracing5/" rel="next" title="RayTracing.vol5">
-      RayTracing.vol5 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
