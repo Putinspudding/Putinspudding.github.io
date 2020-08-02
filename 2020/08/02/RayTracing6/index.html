@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"putinspudding.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Github Repo  RayTracing.vol1RayTracing.vol2RayTracing.vol3RayTracing.vol4RayTracing.vol5  如果坐标系内有多个球体会怎么样？无论是一个球或是多个球，将射线可能射到的物体化为一个抽象类 Hittable,但是由于 Rust 没有继承的概念，所以将其定义为 trait.Hittable trait 有一个 hit">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RayTracing6">
+<meta property="og:url" content="https://putinspudding.github.io/2020/08/02/RayTracing6/index.html">
+<meta property="og:site_name" content="Pwdding&#39;s Dinning Hall">
+<meta property="og:description" content="Github Repo  RayTracing.vol1RayTracing.vol2RayTracing.vol3RayTracing.vol4RayTracing.vol5  如果坐标系内有多个球体会怎么样？无论是一个球或是多个球，将射线可能射到的物体化为一个抽象类 Hittable,但是由于 Rust 没有继承的概念，所以将其定义为 trait.Hittable trait 有一个 hit">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raytracing.github.io/images/fig-1.06-normal-sides.jpg">
+<meta property="og:image" content="https://putinspudding.github.io/img/eighth.png">
+<meta property="article:published_time" content="2020-08-02T14:05:05.000Z">
+<meta property="article:modified_time" content="2020-08-02T14:07:30.452Z">
+<meta property="article:author" content="Putinspudding">
+<meta property="article:tag" content="Rust">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raytracing.github.io/images/fig-1.06-normal-sides.jpg">
+
+<link rel="canonical" href="https://putinspudding.github.io/2020/08/02/RayTracing6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>RayTracing6 | Pwdding's Dinning Hall</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pwdding's Dinning Hall</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://putinspudding.github.io/2020/08/02/RayTracing6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Putinspudding">
+      <meta itemprop="description" content="A most normal college student">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pwdding's Dinning Hall">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RayTracing6
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-08-02 22:05:05 / 修改时间：22:07:30" itemprop="dateCreated datePublished" datetime="2020-08-02T22:05:05+08:00">2020-08-02</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><a href="https://github.com/Putinspudding/RayTraceInRust" target="_blank" rel="noopener">Github Repo</a></p>
+<hr>
+<p><a href="https://putinspudding.github.io/2020/07/20/RayTracing1/">RayTracing.vol1</a><br><a href="https://putinspudding.github.io/2020/07/24/RayTracing2/">RayTracing.vol2</a><br><a href="https://putinspudding.github.io/2020/07/29/RayTracing3/">RayTracing.vol3</a><br><a href="https://putinspudding.github.io/2020/07/30/RayTracing4/">RayTracing.vol4</a><br><a href="https://putinspudding.github.io/2020/08/01/RayTracing5/">RayTracing.vol5</a></p>
+<hr>
+<p>如果坐标系内有多个球体会怎么样？无论是一个球或是多个球，将射线可能射到的物体化为一个抽象类 <code>Hittable</code>,但是由于 Rust 没有继承的概念，所以将其定义为 trait.<code>Hittable</code> trait 有一个 hit 功能用来吸收射线。同时给 t 设置一个区间，当 $t_{min} &lt; t &lt; t_{max}$才算相交。</p>
+<figure class="highlight rust"><figcaption><span>[hittable.rs] 定义 Hittable trait</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> crate::rayh::Ray;</span><br><span class="line"><span class="keyword">use</span> ray::Point3;</span><br><span class="line"><span class="keyword">use</span> ray::Vec3;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[derive(Debug, PartialEq, Clone, Copy)]</span></span><br><span class="line"><span class="keyword">pub</span> <span class="class"><span class="keyword">struct</span> <span class="title">Hit_record</span></span> &#123;</span><br><span class="line">    <span class="keyword">pub</span> p: Point3,</span><br><span class="line">    <span class="keyword">pub</span> normal: Vec3,</span><br><span class="line">    <span class="keyword">pub</span> t: <span class="built_in">f32</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">pub</span> <span class="class"><span class="keyword">trait</span> <span class="title">Hittable</span></span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">fn</span> <span class="title">hit</span></span>(&amp;<span class="keyword">self</span>, r: &amp;Ray, t_min: <span class="built_in">f32</span>, t_max: <span class="built_in">f32</span>, rec: &amp;<span class="keyword">mut</span> Hit_record) -&gt; <span class="built_in">bool</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后是定义 sphere 类</p>
+<figure class="highlight rust"><figcaption><span>[hittable.rs] 定义 Hittable trait</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> crate::rayh::Ray;</span><br><span class="line"><span class="keyword">use</span> ray::Point3;</span><br><span class="line"><span class="keyword">use</span> ray::Vec3;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[derive(Debug, PartialEq, Clone, Copy)]</span></span><br><span class="line"><span class="keyword">pub</span> <span class="class"><span class="keyword">struct</span> <span class="title">Hit_record</span></span> &#123;</span><br><span class="line">    <span class="keyword">pub</span> p: Point3,</span><br><span class="line">    <span class="keyword">pub</span> normal: Vec3,</span><br><span class="line">    <span class="keyword">pub</span> t: <span class="built_in">f32</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">pub</span> <span class="class"><span class="keyword">trait</span> <span class="title">Hittable</span></span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">fn</span> <span class="title">hit</span></span>(&amp;<span class="keyword">self</span>, r: &amp;Ray, t_min: <span class="built_in">f32</span>, t_max: <span class="built_in">f32</span>, rec: &amp;<span class="keyword">mut</span> Hit_record) -&gt; <span class="built_in">bool</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对射线同样要进行分情况讨论，定义法线方向永远朝外，若是在球外与球相交的射线，法线方向与射线方向相反，射线若是在球内相交，法线方向与射线方向相同;又或者，可以定义法线永远指向射线的反方向，射线在球内，法线方向向内，射线在球外，法线方向向外。<br>如图所示：<br><img src="https://raytracing.github.io/images/fig-1.06-normal-sides.jpg" alt=""><br>如果我们定义法线方向永远朝外，则对射线着色时需确定射线在哪一侧，这可以通过比较射线与法线所得，如果射线与法线方向相同，则射线在物体内部，若相反则在物体外部。这可以根据两向量的点乘看出，点乘为正则方向相同。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> dot(ray_direction, outward_normal) &gt; <span class="number">0.0</span>&#123;</span><br><span class="line">    <span class="comment">// 射线在物体内部</span></span><br><span class="line">    ...</span><br><span class="line">&#125; <span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="comment">// 射线在物体外部</span></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>相对的，如果我们定义法线方向与射线方向永远相反，则无法通过点乘确定射线位于表面的哪一侧，因此，我们需要储存这个信息。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">front_face: <span class="built_in">bool</span></span><br><span class="line"><span class="keyword">if</span> dot(ray_direction, outward_normal) &gt; <span class="number">0.0</span>&#123;</span><br><span class="line">    <span class="comment">// 射线在物体内部</span></span><br><span class="line">    normal = -outward_normal;</span><br><span class="line">    front_face = <span class="literal">false</span>;</span><br><span class="line">&#125; <span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="comment">// 射线在物体外部</span></span><br><span class="line">    normal = outward_normal;</span><br><span class="line">    front_face = <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>定义法线方向永远朝外或是法线方向永远与射线方向相反，取决于是要在几何相交时还是在着色时确定表面的侧面。演示中含有的材料类型比集合类型多，所以将重点放在几何相交上。<br>给 Hit_record 加上 front_face 以储存方向信息，给 Hittable trait 增加 set_face_normal() 方法</p>
+<figure class="highlight rust"><figcaption><span>% [hittable.rs]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#[derive(Debug, PartialEq, Clone, Copy)]</span></span><br><span class="line"><span class="keyword">pub</span> <span class="class"><span class="keyword">struct</span> <span class="title">Hit_record</span></span> &#123;</span><br><span class="line">    <span class="keyword">pub</span> p: Point3,</span><br><span class="line">    <span class="keyword">pub</span> normal: Vec3,</span><br><span class="line">    <span class="keyword">pub</span> t: <span class="built_in">f32</span>,</span><br><span class="line">    <span class="keyword">pub</span> front_face: <span class="built_in">bool</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span> Hit_record &#123;</span><br><span class="line">    <span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">set_face_normal</span></span>(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>, r: &amp;Ray, outward_normal: Vec3) &#123;</span><br><span class="line">        <span class="keyword">self</span>.front_face = dot(r.direction(), outward_normal) &lt; <span class="number">0.0</span>;</span><br><span class="line">        <span class="keyword">self</span>.normal = <span class="keyword">if</span> <span class="keyword">self</span>.front_face &#123;</span><br><span class="line">            outward_normal</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            -outward_normal</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再将 set_face_normal() 用于 Sphere.hit() 中</p>
+<figure class="highlight rust"><figcaption><span>% [sphere.rs]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">impl</span> Hittable <span class="keyword">for</span> Sphere &#123;</span><br><span class="line">    <span class="function"><span class="keyword">fn</span> <span class="title">hit</span></span>(&amp;<span class="keyword">self</span>, r: &amp;Ray, t_min: <span class="built_in">f32</span>, t_max: <span class="built_in">f32</span>, rec: &amp;<span class="keyword">mut</span> Hit_record) -&gt; <span class="built_in">bool</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> oc: Vec3 = r.origin() - <span class="keyword">self</span>.center;</span><br><span class="line">        <span class="keyword">let</span> a = r.direction().length_squared();</span><br><span class="line">        <span class="keyword">let</span> half_b = dot(oc, r.direction());</span><br><span class="line">        <span class="keyword">let</span> c = oc.length_squared() - <span class="keyword">self</span>.radius * <span class="keyword">self</span>.radius;</span><br><span class="line">        <span class="keyword">let</span> discriminant = half_b * half_b - a * c;</span><br><span class="line">        <span class="keyword">if</span> discriminant &lt; <span class="number">0.0</span> &#123;</span><br><span class="line">            <span class="keyword">let</span> root = discriminant.sqrt();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">let</span> temp = (-half_b - root) / a;</span><br><span class="line">            <span class="keyword">if</span> temp &lt; t_max &amp;&amp; temp &gt; t_min &#123;</span><br><span class="line">                rec.t = temp;</span><br><span class="line">                rec.p = r.at(rec.t);</span><br><span class="line">                <span class="keyword">let</span> outward_normal = (rec.p - <span class="keyword">self</span>.center) / <span class="keyword">self</span>.radius;</span><br><span class="line">                rec.set_face_normal(&amp;r, outward_normal);</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">let</span> temp = (-half_b - root) / a;</span><br><span class="line">            <span class="keyword">if</span> temp &lt; t_max &amp;&amp; temp &gt; t_min &#123;</span><br><span class="line">                rec.t = temp;</span><br><span class="line">                rec.p = r.at(rec.t);</span><br><span class="line">                <span class="keyword">let</span> outward_normal = (rec.p - <span class="keyword">self</span>.center) / <span class="keyword">self</span>.radius;</span><br><span class="line">                rec.set_face_normal(&amp;r, outward_normal);</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>定义一个类来储存一堆有 Hittable trait 的泛型数据类型,同时也要为其定义 Hittable trait</p>
+<figure class="highlight rust"><figcaption><span>% [hittable_list.rs]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> crate::hittable::*;</span><br><span class="line"><span class="keyword">use</span> crate::rayh::*;</span><br><span class="line"><span class="keyword">use</span> ray::*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">pub</span> <span class="class"><span class="keyword">struct</span> <span class="title">Hittable_list</span></span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">pub</span> objects: <span class="built_in">Vec</span>&lt;T&gt;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span>&lt;T: Hittable&gt; Hittable_list&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">new</span></span>(object: T) -&gt; Hittable_list&lt;T&gt; &#123;</span><br><span class="line">        Hittable_list &#123;</span><br><span class="line">            objects: <span class="built_in">vec!</span>[object],</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">clear</span></span>(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>) &#123;</span><br><span class="line">        (*<span class="keyword">self</span>).objects.truncate(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">add</span></span>(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>, object: T) &#123;</span><br><span class="line">        (*<span class="keyword">self</span>).objects.push(object);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">impl</span>&lt;T: Hittable&gt; Hittable <span class="keyword">for</span> Hittable_list&lt;T&gt; &#123;</span><br><span class="line">    <span class="function"><span class="keyword">fn</span> <span class="title">hit</span></span>(&amp;<span class="keyword">self</span>, r: &amp;Ray, t_min: <span class="built_in">f32</span>, t_max: <span class="built_in">f32</span>, rec: &amp;<span class="keyword">mut</span> Hit_record) -&gt; <span class="built_in">bool</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> <span class="keyword">mut</span> temp_rec = Hit_record &#123;</span><br><span class="line">            p: Vec3(<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>),</span><br><span class="line">            normal: Vec3(<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>),</span><br><span class="line">            t: <span class="number">0.0</span>,</span><br><span class="line">            front_face: <span class="literal">true</span>,</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">let</span> <span class="keyword">mut</span> hit_anything = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">let</span> <span class="keyword">mut</span> closest_so_far = t_max;</span><br><span class="line">        <span class="keyword">let</span> <span class="keyword">mut</span> ar_temp_rec = temp_rec;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> object <span class="keyword">in</span> &amp;<span class="keyword">self</span>.objects &#123;</span><br><span class="line">            <span class="keyword">if</span> object.hit(r, t_min, closest_so_far, &amp;<span class="keyword">mut</span> temp_rec) &#123;</span><br><span class="line">                hit_anything = <span class="literal">true</span>;</span><br><span class="line">                closest_so_far = temp_rec.t;</span><br><span class="line">                ar_temp_rec = temp_rec;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        *rec = ar_temp_rec;</span><br><span class="line">        hit_anything</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>定义常用数学常量</p>
+<figure class="highlight rust"><figcaption><span>% [rtweekend.rs]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">pub</span> <span class="keyword">const</span> infinity: <span class="built_in">f32</span> = <span class="built_in">f32</span>::INFINITY;</span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">const</span> PI: <span class="built_in">f32</span> = <span class="number">3.14159274f32</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">degrees_to_radians</span></span>(degrees: <span class="built_in">f32</span>) -&gt; <span class="built_in">f32</span> &#123;</span><br><span class="line">    degrees * PI / <span class="number">180.0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>更改 main.rs</p>
+<figure class="highlight rust"><figcaption><span>% [main.rs]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">mod</span> color;</span><br><span class="line"><span class="keyword">mod</span> hittable;</span><br><span class="line"><span class="keyword">mod</span> hittable_list;</span><br><span class="line"><span class="keyword">mod</span> rayh;</span><br><span class="line"><span class="keyword">mod</span> rtweekend;</span><br><span class="line"><span class="keyword">mod</span> sphere;</span><br><span class="line"><span class="keyword">use</span> color::*;</span><br><span class="line"><span class="keyword">use</span> hittable::*;</span><br><span class="line"><span class="keyword">use</span> hittable_list::*;</span><br><span class="line"><span class="keyword">use</span> ray::*;</span><br><span class="line"><span class="keyword">use</span> rayh::*;</span><br><span class="line"><span class="keyword">use</span> rtweekend::*;</span><br><span class="line"><span class="keyword">use</span> sphere::*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> IMAGE_WIDTH: <span class="built_in">u16</span> = <span class="number">400</span>;</span><br><span class="line"><span class="keyword">const</span> ASPECT_RATIO: <span class="built_in">f32</span> = <span class="number">16.0</span> / <span class="number">9.0</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">ray_color</span></span>&lt;T: Hittable&gt;(r: &amp;Ray, world: &amp;T) -&gt; Color &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut</span> rec = Hit_record &#123;</span><br><span class="line">        p: Vec3(<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>),</span><br><span class="line">        normal: Vec3(<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>),</span><br><span class="line">        t: <span class="number">0.0</span>,</span><br><span class="line">        front_face: <span class="literal">true</span>,</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">if</span> world.hit(r, <span class="number">0.0</span>, infinity, &amp;<span class="keyword">mut</span> rec) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0.5</span> * (rec.normal + Vec3(<span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">let</span> unit_direction = unit_vector(r.direction());</span><br><span class="line">    <span class="keyword">let</span> t = <span class="number">0.5</span> * (unit_direction.y() + <span class="number">1.0</span>);</span><br><span class="line">    (<span class="number">1.0</span> - t) * Vec3(<span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span>) + t * Vec3(<span class="number">0.5</span>, <span class="number">0.7</span>, <span class="number">1.0</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> IMAGE_HEIGHT = <span class="keyword">unsafe</span> &#123; (IMAGE_WIDTH <span class="keyword">as</span> <span class="built_in">f32</span> / ASPECT_RATIO).to_int_unchecked::&lt;<span class="built_in">u16</span>&gt;() &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut</span> world = Hittable_list &#123;</span><br><span class="line">        objects: <span class="built_in">Vec</span>::new(),</span><br><span class="line">    &#125;;</span><br><span class="line">    world.add(Sphere &#123;</span><br><span class="line">        center: Vec3(<span class="number">0.0</span>, <span class="number">0.0</span>, -<span class="number">1.0</span>),</span><br><span class="line">        radius: <span class="number">0.5</span>,</span><br><span class="line">    &#125;);</span><br><span class="line">    world.add(Sphere &#123;</span><br><span class="line">        center: Vec3(<span class="number">0.0</span>, -<span class="number">100.5</span>, -<span class="number">1.0</span>),</span><br><span class="line">        radius: <span class="number">100.0</span>,</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">println!</span> &#123;<span class="string">"P3\n&#123;&#125; &#123;&#125;\n255"</span>,IMAGE_WIDTH,IMAGE_HEIGHT&#125;;</span><br><span class="line">    <span class="keyword">let</span> viewport_height = <span class="number">2.0</span>;</span><br><span class="line">    <span class="keyword">let</span> viewport_width: <span class="built_in">f32</span> = ASPECT_RATIO * viewport_height;</span><br><span class="line">    <span class="keyword">let</span> focal_length = <span class="number">1.0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> origin: Point3 = Vec3(<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>);</span><br><span class="line">    <span class="keyword">let</span> horizontal = Vec3(viewport_width, <span class="number">0.0</span>, <span class="number">0.0</span>);</span><br><span class="line">    <span class="keyword">let</span> vertical = Vec3(<span class="number">0.0</span>, viewport_height, <span class="number">0.0</span>);</span><br><span class="line">    <span class="keyword">let</span> lower_left_corner =</span><br><span class="line">        origin - horizontal / <span class="number">2</span> <span class="keyword">as</span> <span class="built_in">f32</span> - vertical / <span class="number">2</span> <span class="keyword">as</span> <span class="built_in">f32</span> - Vec3(<span class="number">0.0</span>, <span class="number">0.0</span>, focal_length);</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> (<span class="number">0</span>..IMAGE_HEIGHT).rev() &#123;</span><br><span class="line">        eprintln!(<span class="string">"\rScanlines remaining:&#123;&#125;"</span>, j);</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">0</span>..IMAGE_WIDTH &#123;</span><br><span class="line">            <span class="keyword">let</span> u = i <span class="keyword">as</span> <span class="built_in">f32</span> / (IMAGE_WIDTH - <span class="number">1</span>) <span class="keyword">as</span> <span class="built_in">f32</span>;</span><br><span class="line">            <span class="keyword">let</span> v = j <span class="keyword">as</span> <span class="built_in">f32</span> / (IMAGE_HEIGHT - <span class="number">1</span>) <span class="keyword">as</span> <span class="built_in">f32</span>;</span><br><span class="line">            <span class="keyword">let</span> r = Ray &#123;</span><br><span class="line">                orig: origin,</span><br><span class="line">                dir: lower_left_corner + u * horizontal + v * vertical - origin,</span><br><span class="line">            &#125;;</span><br><span class="line">            <span class="keyword">let</span> pixel_color = ray_color(&amp;r, &amp;world);</span><br><span class="line">            <span class="built_in">print!</span>(<span class="string">"&#123;&#125;"</span>, write_color(pixel_color));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    eprintln!(<span class="string">"\nDone"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>最后得出的图片如下图所示<br><img src="/img/eighth.png" alt=""></p>
+<div align="center">
+<a  href = "/file/6.ppm">输出文件</p>
+<a  href = "https://github.com/Putinspudding/RayTraceInRust/tree/bc5f1dd4214ff86fe2f79931def8e8c49aa9a0ee">本章节全部代码</p>
+</div>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Rust/" rel="tag"># Rust</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/08/01/RayTracing5/" rel="prev" title="RayTracing.vol5">
+      <i class="fa fa-chevron-left"></i> RayTracing.vol5
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Putinspudding</p>
+  <div class="site-description" itemprop="description">A most normal college student</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://piggy.moe/" title="https:&#x2F;&#x2F;piggy.moe" rel="noopener" target="_blank">Piggy</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://billchen.bid/" title="https:&#x2F;&#x2F;billchen.bid&#x2F;" rel="noopener" target="_blank">Billchenchina</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://logistics.camber.moe/" title="https:&#x2F;&#x2F;logistics.camber.moe&#x2F;" rel="noopener" target="_blank">Camber</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Putinspudding</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+  
+
+    
+
+</body>
+
+</html>
