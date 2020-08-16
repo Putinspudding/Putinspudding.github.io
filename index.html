@@ -153,6 +153,75 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://putinspudding.github.io/2020/08/16/RayTracing8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Putinspudding">
+      <meta itemprop="description" content="A most normal college student">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pwdding's Dinning Hall">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/08/16/RayTracing8/" class="post-title-link" itemprop="url">RayTracing.vol8</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-08-16 23:27:53" itemprop="dateCreated datePublished" datetime="2020-08-16T23:27:53+08:00">2020-08-16</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a href="https://github.com/Putinspudding/RayTraceInRust" target="_blank" rel="noopener">Github Repo</a></p>
+<hr>
+<h1 id="漫反射材质"><a href="#漫反射材质" class="headerlink" title="漫反射材质"></a>漫反射材质</h1><h2 id="一种简易的漫反射材质"><a href="#一种简易的漫反射材质" class="headerlink" title="一种简易的漫反射材质"></a>一种简易的漫反射材质</h2><p>不发光的漫反射物体仅仅吸收其周遭的颜色，但是其固有颜色进行调和。从漫反射表面反射回来光线的方向是随机的，因此，如果我们将三条射线射向两个物体的间隔缝中，它们会有不同的随机表现。<br><img src="https://raytracing.github.io/images/fig-1.08-light-bounce.jpg" alt=""><br>这些射线也有可能被吸收而不是被反射，物体表面越黑，光线越容易被吸收。实际上，任何将射线的反射方向随机化的算法都会产生看起来粗糙的表面。实现这种算法的最简单的方法之一被发现是对实现理想漫反射表面完全恰当的。  </p>
+<p>有两个单位球与表面上的交点 P 相切，两个球心分别为 $\boldsymbol{(P+n)}$ 和 $\boldsymbol{(P-n)}$, $\boldsymbol{n}$ 是表面在 P 处的法线，把球心为 $\boldsymbol{(P-n)}$ 的球体看作在表面内部，那么球心为 $\boldsymbol{(P+n)}$ 的球体即在表面外部，选择与射线源点在表面同一侧的单位相切球，随机选取球内任意一点 S，从交点 P 发射一条射线到点 S($\boldsymbol{(S-P)}$).<br><img src="https://raytracing.github.io/images/fig-1.09-rand-vec.jpg" alt=""><br>关于球内随机点的选取方法，首先，在 x，y，z 都在 -1 到 1 范围内的方块中选取一个随机点，如果不在球内则重新随机选取。</p>
+<figure class="highlight rust"><figcaption><span>[lib.rs]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">impl</span> Vec3 &#123;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">    <span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">random</span></span>(min: <span class="built_in">Option</span>&lt;<span class="built_in">f32</span>&gt;, max: <span class="built_in">Option</span>&lt;<span class="built_in">f32</span>&gt;) -&gt; Vec3 &#123;</span><br><span class="line">        Vec3(</span><br><span class="line">            random_double(min, max),</span><br><span class="line">            random_double(min, max),</span><br><span class="line">            random_double(min, max),</span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">random_in_unit_sphere</span></span>() -&gt; Vec3 &#123;</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">true</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> p = Vec3::random(-<span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">if</span> p.length_squared() &gt;= <span class="number">1</span> &#123;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> p;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight rust"><figcaption><span>[main.rs]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">ray_color</span></span>&lt;T: Hittable&gt;(r: &amp;Ray, world: &amp;T) -&gt; Color &#123;</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> world.hit(r, <span class="number">0.0</span>, infinity, &amp;<span class="keyword">mut</span> rec) &#123;</span><br><span class="line">        <span class="keyword">let</span> target = rec.p + rec.normal + random_in_unit_sphere();</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0.5</span> </span><br><span class="line">            * ray_color(</span><br><span class="line">                &amp;Ray&#123;</span><br><span class="line">                    orig:rec.p, </span><br><span class="line">                    dir:target - rec.p</span><br><span class="line">                &#125;, </span><br><span class="line">                world,</span><br><span class="line">            );</span><br><span class="line">    &#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<h2 id="限制子射线的数量"><a href="#限制子射线的数量" class="headerlink" title="限制子射线的数量"></a>限制子射线的数量</h2><p><code>ray_color</code> 函数是递归的，递归出口是其与任何物体没有交点的时候，但是这可能会画上很长时间，因此需要一个最大递归深度，到达最大深度后不返回光线。</p>
+<figure class="highlight rust"><figcaption><span>[main.rs]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> MAX_DEPTH: <span class="built_in">u16</span> = <span class="number">50</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">ray_color</span></span>&lt;T: Hittable&gt;(r: &amp;Ray, world: &amp;T, depth: <span class="built_in">u16</span>) -&gt; Color &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut</span> rec = Hit_record &#123;</span><br><span class="line">        p: Vec3(<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>),</span><br><span class="line">        normal: Vec3(<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>),</span><br><span class="line">        t: <span class="number">0.0</span>,</span><br><span class="line">        front_face: <span class="literal">true</span>,</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">if</span> depth &lt;= <span class="number">0</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> Vec3(<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> world.hit(r, <span class="number">0.0</span>, infinity, &amp;<span class="keyword">mut</span> rec) &#123;</span><br><span class="line">        <span class="keyword">let</span> target = rec.p + rec.normal + random_in_unit_sphere();</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0.5</span></span><br><span class="line">            * ray_color(</span><br><span class="line">                &amp;Ray &#123;</span><br><span class="line">                    orig: rec.p,</span><br><span class="line">                    dir: target - rec.p,</span><br><span class="line">                &#125;,</span><br><span class="line">                world,</span><br><span class="line">                depth - <span class="number">1</span>,</span><br><span class="line">            );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">                pixel_color += ray_color(&amp;r, &amp;world, MAX_DEPTH);</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>得出图形如下<br><img src="/img/tenth.png" alt=""></p>
+<div align="center">
+<a  href = "/file/test8.ppm">输出文件</p>
+</div>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://putinspudding.github.io/2020/08/04/RayTracing7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -806,7 +875,7 @@ rand = &quot;0.7&quot;</code></pre><p>因为 Rust 既不支持函数重载，也
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">9</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
