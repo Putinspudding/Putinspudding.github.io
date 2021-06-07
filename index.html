@@ -153,6 +153,68 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://putinspudding.github.io/2021/06/08/ExploitEducationWP1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Putinspudding">
+      <meta itemprop="description" content="A most normal college student">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pwdding's Dinning Hall">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/06/08/ExploitEducationWP1/" class="post-title-link" itemprop="url">ExploitEducationWP1</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-06-08 00:58:45 / 修改时间：02:10:49" itemprop="dateCreated datePublished" datetime="2021-06-08T00:58:45+08:00">2021-06-08</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>上网冲浪时发现了<a href="https://www.youtube.com/watch?v=Y-4WHf0of6Y" target="_blank" rel="noopener">这个视频</a>，里面介绍了<a href="https://exploit.education/" target="_blank" rel="noopener">这么个网址</a>，其中有五种虚拟机环境，Nebula、Phoenix、Fusion、Main Sequence以及Protostar，咱在写这篇博客的时候才详细看了介绍，照理说应该从 Nebula 开始入门，但是咱从 Phoenix 开始了。（视频中用的是Protostar，目前已经被Phoenix替代）。Phoenix的下载链接是个Qcow2 images，咱也不知道咋跑，在网上搜索教程发现里面有个.sh文件，好像还要运行qemu，又在VM上装了个Kali。给Phoenix文件夹里的.sh文件chmod 777 ，再 <code>sudo apt-get install qemu-system-x86</code> 安装完 qemu 之后，运行.sh文件。输入用户名<code>user</code>以及密码<code>user</code><br><img src="/img/Exploit/qemu.png" alt="qemu界面">当然，也可以通过netstat查看端口后<br><img src="/img/Exploit/netstat.png" alt="">使用<code>ssh user@127.0.0.1 -p 2222</code>连接<br>总之，Phoenix的安装与启动完成了。题目文件全在<code>/opt/phoenix/&lt;architecture&gt;</code>之中（architecture 由下载的文件确定）</p>
+<h2 id="Stack-Zero"><a href="#Stack-Zero" class="headerlink" title="Stack-Zero"></a>Stack-Zero</h2><p>Stack-Zero的源码如下：</p>
+<figure class="highlight c"><figcaption><span>Stack-Zero</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * phoenix/stack-zero, by https://exploit.education</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * The aim is to change the contents of the changeme variable.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Scientists have recently discovered a previously unknown species of</span></span><br><span class="line"><span class="comment"> * kangaroos, approximately in the middle of Western Australia. These</span></span><br><span class="line"><span class="comment"> * kangaroos are remarkable, as their insanely powerful hind legs give them</span></span><br><span class="line"><span class="comment"> * the ability to jump higher than a one story house (which is approximately</span></span><br><span class="line"><span class="comment"> * 15 feet, or 4.5 metres), simply because houses can't can't jump.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BANNER \</span></span><br><span class="line">  <span class="string">"Welcome to "</span> LEVELNAME <span class="string">", brought to you by https://exploit.education"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">gets</span><span class="params">(<span class="keyword">char</span> *)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span> </span>&#123;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="keyword">char</span> <span class="built_in">buffer</span>[<span class="number">64</span>];</span><br><span class="line">    <span class="keyword">volatile</span> <span class="keyword">int</span> changeme;</span><br><span class="line">  &#125; locals;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"%s\n"</span>, BANNER);</span><br><span class="line"></span><br><span class="line">  locals.changeme = <span class="number">0</span>;</span><br><span class="line">  gets(locals.<span class="built_in">buffer</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (locals.changeme != <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">"Well done, the 'changeme' variable has been changed!"</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">puts</span>(</span><br><span class="line">        <span class="string">"Uh oh, 'changeme' has not yet been changed. Would you like to try "</span></span><br><span class="line">        <span class="string">"again?"</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>咱也不知道是不是应该一上来就看源码，顶上视频中是不看源码直接gdb，咱做不到，所以咱还是看源码吧。<br>volatile 关键字作用是防止变量 changeme 被优化。这题是很明显的缓冲区溢出（这是废话，接下来三题也是），buffer的最大长度是64字符，所以只要输入超过64字符缓冲区就会溢出，达到修改 changeme 的效果。所以输入 65 个字符可以解决，或者有种简便方法：<code>python -c &#39;print(&quot;A&quot;*65)&#39;| ./stack-zero</code></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://putinspudding.github.io/2021/06/06/BUUCTFchallengesWP1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -862,73 +924,11 @@ rand = &quot;0.7&quot;</code></pre><p>因为 Rust 既不支持函数重载，也
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://putinspudding.github.io/2020/07/20/Pwdding/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Putinspudding">
-      <meta itemprop="description" content="A most normal college student">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Pwdding's Dinning Hall">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/07/20/Pwdding/" class="post-title-link" itemprop="url">Pwdding?</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-07-20 18:06:02" itemprop="dateCreated datePublished" datetime="2020-07-20T18:06:02+08:00">2020-07-20</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-03-03 15:17:53" itemprop="dateModified" datetime="2021-03-03T15:17:53+08:00">2021-03-03</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>普通到不能再普通的大学生，对什么事都充满好奇，都想尝试，但是热情很快就会退却。<br>ID 是 Putinspudding ,来源是高中拿了一本杂志到学校，封面上印字的是 Putinism(The Economist OCTOBER 22ND-28TH 2016)，朋友说读起来好像 Puddingism，就顺势组合了一下。在后来因为政治性避嫌(?)<del>/懒</del>会使用<del>迫真</del>缩写 Pwdding.<br>Ingress Res L12(AFK<del>游戏打不开了</del>) 有过 Biocard，但是电子模板一时半会找不到了<br>不会写代码，想当码农<br>PC 游戏成瘾<br>Steam 个人界面:<a href="https://steamcommunity.com/id/PWdding/" target="_blank" rel="noopener">https://steamcommunity.com/id/PWdding/</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+  </nav>
 
 
 
@@ -993,7 +993,7 @@ rand = &quot;0.7&quot;</code></pre><p>因为 Rust 既不支持函数重载，也
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-count">11</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
