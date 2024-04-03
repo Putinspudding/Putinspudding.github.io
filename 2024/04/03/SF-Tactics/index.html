@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Tactics（上）在写SF练习答案的时候顺便水点博客答案只能保证正确，不保证是最简单的不写主观题 练习：2 星, standard, optional (silly_ex)1234567Theorem silly_ex :     (forall n, evenb n &#x3D; true -&gt; oddb (S n) &#x3D; true) -&gt;     evenb 4 &#x3D; true -&gt;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SF-Tactics">
+<meta property="og:url" content="http://example.com/2024/04/03/SF-Tactics/index.html">
+<meta property="og:site_name" content="Pudding&#39;s Dinning Hall">
+<meta property="og:description" content="Tactics（上）在写SF练习答案的时候顺便水点博客答案只能保证正确，不保证是最简单的不写主观题 练习：2 星, standard, optional (silly_ex)1234567Theorem silly_ex :     (forall n, evenb n &#x3D; true -&gt; oddb (S n) &#x3D; true) -&gt;     evenb 4 &#x3D; true -&gt;">
+<meta property="og:locale">
+<meta property="article:published_time" content="2024-04-03T06:29:00.000Z">
+<meta property="article:modified_time" content="2024-04-03T09:52:46.723Z">
+<meta property="article:author" content="Putinspudding">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2024/04/03/SF-Tactics/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh'
+  };
+</script>
+
+  <title>SF-Tactics | Pudding's Dinning Hall</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pudding's Dinning Hall</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/04/03/SF-Tactics/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Putinspudding">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pudding's Dinning Hall">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SF-Tactics
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-04-03 14:29:00 / Modified: 17:52:46" itemprop="dateCreated datePublished" datetime="2024-04-03T14:29:00+08:00">2024-04-03</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Tactics（上）"><a href="#Tactics（上）" class="headerlink" title="Tactics（上）"></a>Tactics（上）</h1><p>在写SF练习答案的时候顺便水点博客<br>答案只能保证正确，不保证是最简单的<br>不写主观题</p>
+<h3 id="练习：2-星-standard-optional-silly-ex"><a href="#练习：2-星-standard-optional-silly-ex" class="headerlink" title="练习：2 星, standard, optional (silly_ex)"></a>练习：2 星, standard, optional (silly_ex)</h3><figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Theorem</span> silly_ex :</span><br><span class="line">     (<span class="keyword">forall</span> n, evenb n = true -&gt; oddb (S n) = true) -&gt;</span><br><span class="line">     evenb <span class="number">4</span> = true -&gt;</span><br><span class="line">     oddb <span class="number">3</span> = true.</span><br><span class="line"><span class="keyword">Proof</span>.</span><br><span class="line">  <span class="built_in">intros</span> eq1 eq2.</span><br><span class="line">  <span class="built_in">apply</span> eq1. <span class="built_in">apply</span> eq2.  <span class="keyword">Qed</span>.</span><br></pre></td></tr></table></figure>
+
+<h3 id="练习：3-星-standard-apply-exercise1"><a href="#练习：3-星-standard-apply-exercise1" class="headerlink" title="练习：3 星, standard (apply_exercise1)"></a>练习：3 星, standard (apply_exercise1)</h3><figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Theorem</span> rev_exercise1 : <span class="keyword">forall</span> (l l&#x27; : list nat),</span><br><span class="line">     l = rev l&#x27; -&gt;</span><br><span class="line">     l&#x27; = rev l.</span><br><span class="line"><span class="keyword">Proof</span>.</span><br><span class="line">  <span class="built_in">intros</span> l l&#x27; eq1.</span><br><span class="line">  <span class="built_in">rewrite</span> -&gt; eq1.</span><br><span class="line">  <span class="keyword">Search</span> rev.</span><br><span class="line">  <span class="built_in">symmetry</span>.</span><br><span class="line">  <span class="built_in">apply</span> (rev_involutive nat).</span><br><span class="line">  <span class="comment">(* rev_involutive: </span></span><br><span class="line"><span class="comment">        forall (X : Type) (l : list X), rev (rev l) = l *)</span></span><br><span class="line">  <span class="keyword">Qed</span>.</span><br></pre></td></tr></table></figure>
+
+<p>上文第9行的 nat 可加可不加，coq 可以自动推断 Type 是 nat。</p>
+<h3 id="练习：3-星-standard-optional-apply-with-exercise"><a href="#练习：3-星-standard-optional-apply-with-exercise" class="headerlink" title="练习：3 星, standard, optional (apply_with_exercise)"></a>练习：3 星, standard, optional (apply_with_exercise)</h3><figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Example</span> trans_eq_exercise : <span class="keyword">forall</span> (n m o p : nat),</span><br><span class="line">     m = (minustwo o) -&gt;</span><br><span class="line">     (n + p) = m -&gt;</span><br><span class="line">     (n + p) = (minustwo o).</span><br><span class="line"><span class="keyword">Proof</span>.</span><br><span class="line">  <span class="built_in">intros</span> n m o p eq1 eq2.</span><br><span class="line">  <span class="built_in">apply</span> trans_eq <span class="built_in">with</span> (m).</span><br><span class="line">  <span class="built_in">apply</span> eq2. <span class="built_in">apply</span> eq1. <span class="keyword">Qed</span>.</span><br></pre></td></tr></table></figure>
+
+<h3 id="练习：3-星-standard-injection-ex3"><a href="#练习：3-星-standard-injection-ex3" class="headerlink" title="练习：3 星, standard (injection_ex3)"></a>练习：3 星, standard (injection_ex3)</h3><figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Example</span> injection_ex3 : <span class="keyword">forall</span> (X : <span class="keyword">Type</span>) (x y z : X) (l j : list X),</span><br><span class="line">  x :: y :: l = z :: j -&gt;</span><br><span class="line">  j = z :: l -&gt;</span><br><span class="line">  x = y.</span><br><span class="line"><span class="keyword">Proof</span>.</span><br><span class="line">  <span class="built_in">intros</span> X x y z l j.</span><br><span class="line">  <span class="built_in">intros</span> H1 H2.</span><br><span class="line">  <span class="built_in">injection</span> H1 <span class="built_in">as</span> H1&#x27; H1&#x27;&#x27;.</span><br><span class="line">  <span class="built_in">rewrite</span> H1&#x27;.</span><br><span class="line">  <span class="built_in">rewrite</span> &lt;- H1&#x27;&#x27; <span class="built_in">in</span> H2.</span><br><span class="line">  <span class="built_in">injection</span> H2 <span class="built_in">as</span> H2&#x27;.</span><br><span class="line">  <span class="built_in">symmetry</span>.</span><br><span class="line">  <span class="built_in">apply</span> H2&#x27;.</span><br><span class="line">  <span class="keyword">Qed</span>.  </span><br></pre></td></tr></table></figure>
+
+<p>另一种实现（使用apply with（实际上写起来没什么差别）：</p>
+<figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Example</span> injection_ex3 : <span class="keyword">forall</span> (X : <span class="keyword">Type</span>) (x y z : X) (l j : list X),</span><br><span class="line">  x :: y :: l = z :: j -&gt;</span><br><span class="line">  j = z :: l -&gt;</span><br><span class="line">  x = y.</span><br><span class="line"><span class="keyword">Proof</span>.</span><br><span class="line">  <span class="built_in">intros</span> X x y z l j.</span><br><span class="line">  <span class="built_in">intros</span> H1 H2.</span><br><span class="line">  <span class="built_in">injection</span> H1 <span class="built_in">as</span> H1&#x27; H1&#x27;&#x27;.</span><br><span class="line">  <span class="built_in">rewrite</span> &lt;- H1&#x27;&#x27; <span class="built_in">in</span> H2.</span><br><span class="line">  <span class="built_in">injection</span> H2 <span class="built_in">as</span> H2&#x27;.</span><br><span class="line">  <span class="built_in">apply</span> trans_eq <span class="built_in">with</span> (z).</span><br><span class="line">  <span class="built_in">apply</span> H1&#x27;. <span class="built_in">symmetry</span>. <span class="built_in">apply</span> H2&#x27;.</span><br><span class="line">  <span class="keyword">Qed</span>.</span><br></pre></td></tr></table></figure>
+
+<h3 id="练习：1-星-standard-discriminate-ex3"><a href="#练习：1-星-standard-discriminate-ex3" class="headerlink" title="练习：1 星, standard (discriminate_ex3)"></a>练习：1 星, standard (discriminate_ex3)</h3><figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Example</span> discriminate_ex3 :</span><br><span class="line">  <span class="keyword">forall</span> (X : <span class="keyword">Type</span>) (x y z : X) (l j : list X),</span><br><span class="line">    x :: y :: l = [] -&gt;</span><br><span class="line">    x = z.</span><br><span class="line"><span class="keyword">Proof</span>.</span><br><span class="line">  <span class="built_in">intros</span> X x y z l j.</span><br><span class="line">  <span class="built_in">intros</span> H.</span><br><span class="line">  <span class="built_in">discriminate</span> H.</span><br><span class="line">  <span class="keyword">Qed</span>.</span><br></pre></td></tr></table></figure>
+
+<h3 id="练习：2-星-standard-eqb-true"><a href="#练习：2-星-standard-eqb-true" class="headerlink" title="练习：2 星, standard (eqb_true)"></a>练习：2 星, standard (eqb_true)</h3><figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Theorem</span> eqb_true : <span class="keyword">forall</span> n m,</span><br><span class="line">    n =? m = true -&gt; n = m.</span><br><span class="line"><span class="keyword">Proof</span>.</span><br><span class="line">  <span class="built_in">intros</span> n.</span><br><span class="line">  <span class="built_in">induction</span> n <span class="built_in">as</span> [].</span><br><span class="line">  - <span class="built_in">destruct</span> m <span class="built_in">as</span>[].</span><br><span class="line">  ++ <span class="built_in">reflexivity</span>.</span><br><span class="line">  ++ <span class="built_in">discriminate</span>.</span><br><span class="line">  - <span class="built_in">destruct</span> m <span class="built_in">as</span>[|<span class="type">m</span>&#x27;].</span><br><span class="line">  ++ <span class="built_in">discriminate</span>.</span><br><span class="line">  ++ <span class="built_in">intros</span> H.</span><br><span class="line">    <span class="built_in">f_equal</span>.</span><br><span class="line">    <span class="built_in">simpl</span> <span class="built_in">in</span> H.</span><br><span class="line">    <span class="built_in">apply</span> IHn <span class="built_in">in</span> H.</span><br><span class="line">    <span class="built_in">apply</span> H.</span><br><span class="line">  <span class="keyword">Qed</span>.</span><br></pre></td></tr></table></figure>
+
+<p>主要是我一开始没看懂上面例题在做什么，intros m n 之后最后一个结论证不出来，应该只intro n，之后 m 是 forall m，所以可以随意取值（应该是这个道理？）。</p>
+<h3 id="练习：3-星-standard-recommended-plus-n-n-injective"><a href="#练习：3-星-standard-recommended-plus-n-n-injective" class="headerlink" title="练习：3 星, standard, recommended (plus_n_n_injective)"></a>练习：3 星, standard, recommended (plus_n_n_injective)</h3><figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Theorem</span> plus_n_n_injective : <span class="keyword">forall</span> n m,</span><br><span class="line">     n + n = m + m -&gt;</span><br><span class="line">     n = m.</span><br><span class="line"><span class="keyword">Proof</span>.</span><br><span class="line">  <span class="built_in">intros</span> n. <span class="built_in">induction</span> n <span class="built_in">as</span> [| <span class="type">n</span>&#x27;].</span><br><span class="line">  - <span class="built_in">destruct</span> m <span class="built_in">as</span>[].</span><br><span class="line">    <span class="built_in">simpl</span>. <span class="built_in">reflexivity</span>.</span><br><span class="line">    <span class="built_in">discriminate</span>.</span><br><span class="line">  - <span class="built_in">destruct</span> m <span class="built_in">as</span>[].</span><br><span class="line">    <span class="built_in">discriminate</span>.</span><br><span class="line">    <span class="built_in">intros</span> eq.</span><br><span class="line">    <span class="built_in">simpl</span> <span class="built_in">in</span> eq.</span><br><span class="line">    <span class="built_in">apply</span> S_injective&#x27; <span class="built_in">in</span> eq.</span><br><span class="line">    <span class="built_in">rewrite</span> &lt;-plus_n_Sm <span class="built_in">in</span> eq.</span><br><span class="line">    <span class="built_in">rewrite</span> &lt;-plus_n_Sm <span class="built_in">in</span> eq.</span><br><span class="line">    <span class="built_in">apply</span> S_injective&#x27; <span class="built_in">in</span> eq.</span><br><span class="line">    <span class="built_in">f_equal</span>.</span><br><span class="line">    <span class="built_in">apply</span> IHn&#x27; <span class="built_in">in</span> eq.</span><br><span class="line">    <span class="built_in">apply</span> eq.</span><br><span class="line">  <span class="keyword">Qed</span>.</span><br></pre></td></tr></table></figure>
+<p>主要就是使用前面的S_injective证明 Sn 单射之后把 <code>S (n&#39; + S n&#39;)</code> 转化为 <code>n&#39; + S n&#39;</code> 再用 <code>plus_n_Sm</code> 就行。</p>
+<h3 id="练习：3-星-standard-recommended-gen-dep-practice"><a href="#练习：3-星-standard-recommended-gen-dep-practice" class="headerlink" title="练习：3 星, standard, recommended (gen_dep_practice)"></a>练习：3 星, standard, recommended (gen_dep_practice)</h3><figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Theorem</span> nth_error_after_last: <span class="keyword">forall</span> (n : nat) (X : <span class="keyword">Type</span>) (l : list X),</span><br><span class="line">     length l = n -&gt;</span><br><span class="line">     nth_error l n = None.</span><br><span class="line"><span class="keyword">Proof</span>.</span><br><span class="line">  <span class="built_in">intros</span> n X l.</span><br><span class="line">  <span class="built_in">generalize</span> <span class="built_in">dependent</span> l.</span><br><span class="line">  <span class="built_in">induction</span> n <span class="built_in">as</span> [].</span><br><span class="line">  - <span class="built_in">destruct</span> l.</span><br><span class="line">    <span class="built_in">reflexivity</span>.</span><br><span class="line">    <span class="built_in">discriminate</span>.</span><br><span class="line">  - <span class="built_in">destruct</span> l.</span><br><span class="line">    <span class="built_in">discriminate</span>.</span><br><span class="line">    <span class="built_in">intros</span> H.</span><br><span class="line">    <span class="built_in">simpl</span>.</span><br><span class="line">    <span class="built_in">simpl</span> <span class="built_in">in</span> H.</span><br><span class="line">    <span class="built_in">apply</span> S_injective <span class="built_in">in</span> H.</span><br><span class="line">    <span class="built_in">apply</span> IHn <span class="built_in">in</span> H.</span><br><span class="line">    <span class="built_in">apply</span> H.</span><br><span class="line">  <span class="keyword">Qed</span>.</span><br></pre></td></tr></table></figure>
+
+<p>未完待续</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/06/01/Nginx/" rel="prev" title="记一次 Nginx 配置">
+      <i class="fa fa-chevron-left"></i> 记一次 Nginx 配置
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Tactics%EF%BC%88%E4%B8%8A%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">Tactics（上）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0%EF%BC%9A2-%E6%98%9F-standard-optional-silly-ex"><span class="nav-number">1.0.1.</span> <span class="nav-text">练习：2 星, standard, optional (silly_ex)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0%EF%BC%9A3-%E6%98%9F-standard-apply-exercise1"><span class="nav-number">1.0.2.</span> <span class="nav-text">练习：3 星, standard (apply_exercise1)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0%EF%BC%9A3-%E6%98%9F-standard-optional-apply-with-exercise"><span class="nav-number">1.0.3.</span> <span class="nav-text">练习：3 星, standard, optional (apply_with_exercise)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0%EF%BC%9A3-%E6%98%9F-standard-injection-ex3"><span class="nav-number">1.0.4.</span> <span class="nav-text">练习：3 星, standard (injection_ex3)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0%EF%BC%9A1-%E6%98%9F-standard-discriminate-ex3"><span class="nav-number">1.0.5.</span> <span class="nav-text">练习：1 星, standard (discriminate_ex3)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0%EF%BC%9A2-%E6%98%9F-standard-eqb-true"><span class="nav-number">1.0.6.</span> <span class="nav-text">练习：2 星, standard (eqb_true)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0%EF%BC%9A3-%E6%98%9F-standard-recommended-plus-n-n-injective"><span class="nav-number">1.0.7.</span> <span class="nav-text">练习：3 星, standard, recommended (plus_n_n_injective)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0%EF%BC%9A3-%E6%98%9F-standard-recommended-gen-dep-practice"><span class="nav-number">1.0.8.</span> <span class="nav-text">练习：3 星, standard, recommended (gen_dep_practice)</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Putinspudding</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Putinspudding</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
